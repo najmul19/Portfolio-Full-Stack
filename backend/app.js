@@ -39,6 +39,7 @@ const skillRoutes = require('./routes/skillRoutes');
 const certificateRoutes = require('./routes/certificateRoutes');
 const publicationRoutes = require('./routes/publicationRoutes');
 const aboutRoutes = require('./routes/aboutRoutes');
+const messageRoutes = require('./routes/messageRoutes');
 const authRoutes = require('./routes/authRoutes'); // Assuming you'll want this mounted too
 
 // Mount Routers
@@ -49,6 +50,7 @@ app.use('/api/skills', skillRoutes);
 app.use('/api/certificates', certificateRoutes);
 app.use('/api/publications', publicationRoutes);
 app.use('/api/about', aboutRoutes);
+app.use('/api/messages', messageRoutes);
 app.use('/api/auth', authRoutes);
 
 // Routes (Mounting placeholder)
