@@ -33,10 +33,22 @@ app.use(compression());
 
 // Route Files
 const projectRoutes = require('./routes/projectRoutes');
+const experienceRoutes = require('./routes/experienceRoutes');
+const educationRoutes = require('./routes/educationRoutes');
+const skillRoutes = require('./routes/skillRoutes');
+const certificateRoutes = require('./routes/certificateRoutes');
+const publicationRoutes = require('./routes/publicationRoutes');
+const aboutRoutes = require('./routes/aboutRoutes');
 const authRoutes = require('./routes/authRoutes'); // Assuming you'll want this mounted too
 
 // Mount Routers
 app.use('/api/projects', projectRoutes);
+app.use('/api/experiences', experienceRoutes);
+app.use('/api/education', educationRoutes);
+app.use('/api/skills', skillRoutes);
+app.use('/api/certificates', certificateRoutes);
+app.use('/api/publications', publicationRoutes);
+app.use('/api/about', aboutRoutes);
 app.use('/api/auth', authRoutes);
 
 // Routes (Mounting placeholder)
