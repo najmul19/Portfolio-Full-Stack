@@ -31,6 +31,14 @@ app.use(express.urlencoded({ extended: true }));
 // Compression Middleware
 app.use(compression());
 
+// Route Files
+const projectRoutes = require('./routes/projectRoutes');
+const authRoutes = require('./routes/authRoutes'); // Assuming you'll want this mounted too
+
+// Mount Routers
+app.use('/api/projects', projectRoutes);
+app.use('/api/auth', authRoutes);
+
 // Routes (Mounting placeholder)
 app.get('/', (req, res) => {
     res.send('API is running...');
