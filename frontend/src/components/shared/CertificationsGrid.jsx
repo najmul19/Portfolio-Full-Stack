@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import certificateService from '../../services/certificateService';
-import { FaExternalLinkAlt, FaAward } from 'react-icons/fa';
+import { FaExternalLinkAlt, FaAward, FaFilePdf, FaImage } from 'react-icons/fa';
 
 const CertificationsGrid = () => {
     const [certificates, setCertificates] = useState([]);
@@ -20,42 +20,107 @@ const CertificationsGrid = () => {
     if (certificates.length === 0) return null;
 
     return (
-        <section className="container mx-auto px-6 py-10 bg-dark-bg">
-            <h2 className="text-3xl font-bold text-accent mb-8 border-b border-gray-700 pb-2">Certifications</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {certificates.map(cert => (
-                    <div key={cert._id} className="bg-secondary p-5 rounded-lg hover:bg-gray-800 transition-colors border border-gray-700">
-                        {/* Certificate file thumbnail */}
-                        {cert.fileUrl && cert.fileType === 'image' && (
-                            <a href={cert.fileUrl} target="_blank" rel="noopener noreferrer">
-                                <img src={cert.fileUrl} alt={cert.name} className="w-full h-36 object-cover rounded mb-3 border border-gray-600 hover:opacity-90 transition-opacity" />
-                            </a>
-                        )}
-                        <div className="flex items-center gap-3 mb-3">
-                            <FaAward className="text-accent text-2xl flex-shrink-0" />
-                            <h3 className="font-bold text-white text-lg leading-tight">{cert.name}</h3>
+        <section className="py-24 px-6 bg-grid-pattern">
+            <div className="max-w-6xl mx-auto">
+                <h2 className="section-heading mb-12">Certifications</h2>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {certificates.map(cert => (
+                        <div key={cert._id} className="glass p-8 rounded-2xl group hover:-translate-y-2 transition-all duration-300 relative overflow-hidden flex flex-col h-full" style={{ borderTop: '4px solid var(--c-accent)' }}>
+                            {/* Top info */}
+                            <div className="mb-6">
+                                <div className="flex items-start justify-between mb-4">
+                                    <div
+                                        className="w-10 h-10 rounded-lg flex items-center justify-center bg-opacity-10"
+                                        style={{ background: 'var(--c-accent-subtle)' }}
+                                    >
+                                        <FaAward className="text-xl" style={{ color: 'var(--c-accent)' }} />
+                                    </div>
+                                    <span
+                                        className="text-xs font-mono py-1 px-2 rounded-full mb-2 inline-block"
+                                        style={{ background: 'var(--c-bg-alt)', color: 'var(--c-text-muted)' }}
+                                    >
+                                        {new Date(cert.issueDate).getFullYear()}
+                                    </span>
+                                </div>
+
+                                <h3
+                                    className="text-xl font-bold mb-3 group-hover:text-accent transition-colors min-h-[3rem]"
+                                    style={{ fontFamily: 'var(--font-heading)' }}
+                                >
+                                    {cert.name}
+                                </h3>
+                                <p className="text-sm font-medium" style={{ color: 'var(--c-text-secondary)' }}>
+                                    {cert.issuingOrganization}
+                                </p>
+                            </div>
+
+                            {/* Thumbnail / Preview Area */}
+                            {cert.fileUrl && (
+                                <div className="mt-auto">
+                                    <div className="relative rounded-lg overflow-hidden border bg-[var(--c-bg-alt)]" style={{ borderColor: 'var(--c-border)' }}>
+                                        {cert.fileType === 'image' ? (
+                                            <div className="aspect-video relative group-hover:opacity-90 transition-opacity">
+                                                <img
+                                                    src={cert.fileUrl}
+                                                    alt={cert.name}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div className="aspect-video flex items-center justify-center bg-[var(--c-bg-alt)]">
+                                                <FaFilePdf className="text-4xl opacity-50" style={{ color: 'var(--c-text-muted)' }} />
+                                            </div>
+                                        )}
+
+                                        {/* Actions Overlay */}
+                                        <div className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/50 backdrop-blur-[2px]">
+                                            <a
+                                                href={cert.fileUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="p-2 bg-white rounded-full hover:scale-110 transition-transform shadow-lg text-gray-900"
+                                                title={cert.fileType === 'pdf' ? 'View PDF' : 'View Certificate'}
+                                            >
+                                                {cert.fileType === 'pdf' ? (
+                                                    <FaFilePdf className="text-red-600 text-lg" />
+                                                ) : (
+                                                    <FaImage className="text-blue-600 text-lg" />
+                                                )}
+                                            </a>
+                                            {cert.credentialUrl && (
+                                                <a
+                                                    href={cert.credentialUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="p-2 bg-[var(--c-accent)] text-white rounded-full hover:scale-110 transition-transform shadow-lg"
+                                                    title="Verify Credential"
+                                                >
+                                                    <FaExternalLinkAlt className="text-sm" />
+                                                </a>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Fallback actions if no file */}
+                            {!cert.fileUrl && cert.credentialUrl && (
+                                <div className="mt-auto pt-4 border-t border-[var(--c-border-light)]">
+                                    <a
+                                        href={cert.credentialUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-sm flex items-center gap-2 hover:underline font-medium"
+                                        style={{ color: 'var(--c-accent)' }}
+                                    >
+                                        Verify Credential <FaExternalLinkAlt className="text-xs" />
+                                    </a>
+                                </div>
+                            )}
                         </div>
-                        <p className="text-gray-400 text-sm mb-1">{cert.issuingOrganization}</p>
-                        <p className="text-gray-500 text-xs mb-3">Issued: {new Date(cert.issueDate).toLocaleDateString()}</p>
-                        <div className="flex flex-wrap gap-3">
-                            {cert.credentialUrl && (
-                                <a href={cert.credentialUrl} target="_blank" rel="noopener noreferrer" className="text-accent text-sm hover:underline flex items-center gap-1">
-                                    View Credential <FaExternalLinkAlt className="text-xs" />
-                                </a>
-                            )}
-                            {cert.fileUrl && cert.fileType === 'pdf' && (
-                                <a href={cert.fileUrl} target="_blank" rel="noopener noreferrer" className="text-blue-400 text-sm hover:underline flex items-center gap-1">
-                                    📄 View PDF
-                                </a>
-                            )}
-                            {cert.fileUrl && cert.fileType === 'image' && (
-                                <a href={cert.fileUrl} target="_blank" rel="noopener noreferrer" className="text-blue-400 text-sm hover:underline flex items-center gap-1">
-                                    🖼 View Certificate
-                                </a>
-                            )}
-                        </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
         </section>
     );

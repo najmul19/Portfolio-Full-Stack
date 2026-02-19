@@ -1,19 +1,585 @@
 @import "tailwindcss";
 
-@theme {
-  --color-primary: #0f172a;
-  --color-secondary: #334155;
-  --color-accent: #38bdf8;
-  --color-dark-bg: #020617;
+/* ============================================================
+   DESIGN SYSTEM — Portfolio of MD Najmul Islam
+   AI/ML Researcher · AI Automation Engineer · Full Stack Engineer
+   ============================================================ */
 
-  --font-sans: 'Inter', sans-serif;
+/* ---- Font Family Tokens ---- */
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Space Grotesk', 'Inter', sans-serif;
+
+  /* We keep color tokens minimal here; the real theming
+     is driven by CSS custom properties below so we can
+     swap light/dark with a single data-attribute.        */
+  --color-accent: var(--c-accent);
+  --color-accent-hover: var(--c-accent-hover);
 }
 
+/* =================================================================
+   1. CSS Custom Properties — Light/Dark Theme Tokens
+   ================================================================= */
+
+:root {
+  /* ---------- transition ---------- */
+  --theme-transition: background-color 0.35s ease, color 0.35s ease,
+    border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* — DARK (default) — */
+:root,
+[data-theme="dark"] {
+  --c-bg: #0a0f1e;
+  --c-bg-alt: #111827;
+  --c-surface: #1e293b;
+  --c-surface-hover: #273548;
+  --c-border: #334155;
+  --c-border-light: #475569;
+
+  --c-text: #f1f5f9;
+  --c-text-secondary: #94a3b8;
+  --c-text-muted: #64748b;
+
+  --c-accent: #06b6d4;
+  /* cyan-500 */
+  --c-accent-hover: #22d3ee;
+  /* cyan-400 */
+  --c-accent-subtle: rgba(6, 182, 212, 0.12);
+
+  --c-gradient-start: #06b6d4;
+  --c-gradient-end: #8b5cf6;
+  /* violet-500 */
+
+  --c-glass-bg: rgba(17, 24, 39, 0.72);
+  --c-glass-border: rgba(51, 65, 85, 0.5);
+
+  --c-card-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+  --c-navbar-shadow: 0 1px 12px rgba(0, 0, 0, 0.4);
+
+  --c-success: #22c55e;
+  --c-danger: #ef4444;
+}
+
+/* — LIGHT — */
+[data-theme="light"] {
+  --c-bg: #fafbfc;
+  --c-bg-alt: #f1f5f9;
+  --c-surface: #ffffff;
+  --c-surface-hover: #f8fafc;
+  --c-border: #e2e8f0;
+  --c-border-light: #cbd5e1;
+
+  --c-text: #0f172a;
+  --c-text-secondary: #334155;
+  --c-text-muted: #64748b;
+
+  --c-accent: #0891b2;
+  /* cyan-600 */
+  --c-accent-hover: #0e7490;
+  /* cyan-700 */
+  --c-accent-subtle: rgba(8, 145, 178, 0.08);
+
+  --c-gradient-start: #0891b2;
+  --c-gradient-end: #7c3aed;
+  /* violet-600 */
+
+  --c-glass-bg: rgba(255, 255, 255, 0.95);
+  --c-glass-border: rgba(226, 232, 240, 0.8);
+
+  --c-card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --c-navbar-shadow: 0 1px 12px rgba(0, 0, 0, 0.06);
+
+  --c-success: #16a34a;
+  --c-danger: #dc2626;
+}
+
+/* =================================================================
+   2. Base / Reset
+   ================================================================= */
+
 @layer base {
+  * {
+    transition: var(--theme-transition);
+  }
+
+  /* Opt-out heavy elements from transition to avoid flicker */
+  img,
+  video,
+  canvas,
+  svg,
+  iframe {
+    transition: none !important;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    background-color: var(--color-dark-bg);
-    color: #f3f4f6;
-    /* gray-100 */
+    background-color: var(--c-bg);
+    color: var(--c-text);
     font-family: var(--font-sans);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    line-height: 1.2;
+    font-weight: 600;
+  }
+
+  ::selection {
+    background-color: var(--c-accent);
+    color: #fff;
+  }
+
+  /* Scrollbar styling (Webkit) */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--c-bg-alt);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--c-border);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--c-border-light);
+  }
+}
+
+/* =================================================================
+   3. Utility Classes
+   ================================================================= */
+
+@layer utilities {
+
+  /* ---- Glass card ---- */
+  .glass {
+    background: var(--c-glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--c-glass-border);
+  }
+
+  .glass-strong {
+    background: var(--c-glass-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--c-glass-border);
+  }
+
+  /* ---- Surface card ---- */
+  .card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: 12px;
+    box-shadow: var(--c-card-shadow);
+    transition: transform 0.25s ease, box-shadow 0.25s ease,
+      border-color 0.25s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    border-color: var(--c-accent);
+  }
+
+  .card-static {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: 12px;
+    box-shadow: var(--c-card-shadow);
+  }
+
+  /* ---- Gradient text ---- */
+  .gradient-text {
+    background: linear-gradient(135deg, var(--c-gradient-start), var(--c-gradient-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ---- Gradient border ---- */
+  .gradient-border {
+    position: relative;
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, var(--c-gradient-start), var(--c-gradient-end));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* ---- Accent button ---- */
+  .btn-accent {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    background: linear-gradient(135deg, var(--c-gradient-start), var(--c-gradient-end));
+    color: #fff;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    cursor: pointer;
+    border: none;
+    font-size: 0.95rem;
+  }
+
+  .btn-accent:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(6, 182, 212, 0.35);
+    opacity: 0.92;
+  }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    border: 1.5px solid var(--c-accent);
+    color: var(--c-accent);
+    font-weight: 600;
+    border-radius: 8px;
+    background: transparent;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+    font-size: 0.95rem;
+  }
+
+  .btn-outline:hover {
+    background: var(--c-accent-subtle);
+    transform: translateY(-1px);
+  }
+
+  /* ---- Section heading ---- */
+  .section-heading {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--c-text);
+    position: relative;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-heading::after {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--c-gradient-start), var(--c-gradient-end));
+    border-radius: 2px;
+    margin-top: 0.5rem;
+  }
+
+  .section-heading-center {
+    text-align: center;
+  }
+
+  .section-heading-center::after {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ---- Tag / chip ---- */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 9999px;
+    background: var(--c-accent-subtle);
+    color: var(--c-accent);
+    border: 1px solid transparent;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .tag:hover {
+    border-color: var(--c-accent);
+  }
+
+  /* ---- Dot divider ---- */
+  .dot-divider::before {
+    content: '·';
+    margin: 0 0.5rem;
+    color: var(--c-text-muted);
+  }
+
+  /* ---- Subtle glow (for hero etc.) ---- */
+  .glow-accent {
+    box-shadow: 0 0 40px rgba(6, 182, 212, 0.15);
+  }
+}
+
+/* =================================================================
+   4. Scroll Reveal Animations
+   ================================================================= */
+
+@layer utilities {
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-delay-1 {
+    transition-delay: 0.1s;
+  }
+
+  .reveal-delay-2 {
+    transition-delay: 0.2s;
+  }
+
+  .reveal-delay-3 {
+    transition-delay: 0.3s;
+  }
+
+  .reveal-delay-4 {
+    transition-delay: 0.4s;
+  }
+}
+
+/* =================================================================
+   5. Animated Gradient Keyframes (for hero name)
+   ================================================================= */
+
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-gradient-text {
+  background: linear-gradient(270deg,
+      var(--c-gradient-start),
+      var(--c-gradient-end),
+      var(--c-gradient-start));
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* =================================================================
+   6. Grid Background Pattern (hero)
+   ================================================================= */
+.bg-grid-pattern {
+  position: relative;
+}
+
+.bg-grid-pattern::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--c-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--c-border) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bg-grid-pattern>* {
+  position: relative;
+  z-index: 1;
+}
+
+/* =================================================================
+   7. Hero Background Animations
+   ================================================================= */
+
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* =================================================================
+   8. Neural Particle Animation
+   ================================================================= */
+
+@keyframes float-particle {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0.1;
+  }
+
+  25% {
+    transform: translateY(-15px) translateX(10px) scale(1.2);
+    opacity: 0.2;
+  }
+
+  50% {
+    transform: translateY(0) translateX(20px) scale(1);
+    opacity: 0.1;
+  }
+
+  75% {
+    transform: translateY(15px) translateX(10px) scale(0.8);
+    opacity: 0.2;
+  }
+
+  100% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0.1;
+  }
+}
+
+.particle-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.particle {
+  position: absolute;
+  background: var(--c-accent);
+  border-radius: 50%;
+  animation: float-particle 15s infinite ease-in-out;
+}
+
+.particle-1 {
+  width: 4px;
+  height: 4px;
+  top: 20%;
+  left: 20%;
+  animation-duration: 12s;
+}
+
+.particle-2 {
+  width: 6px;
+  height: 6px;
+  top: 60%;
+  left: 80%;
+  animation-duration: 18s;
+  animation-delay: 1s;
+}
+
+.particle-3 {
+  width: 3px;
+  height: 3px;
+  top: 40%;
+  left: 40%;
+  animation-duration: 15s;
+  animation-delay: 2s;
+}
+
+.particle-4 {
+  width: 5px;
+  height: 5px;
+  top: 80%;
+  left: 10%;
+  animation-duration: 20s;
+  animation-delay: 3s;
+}
+
+.particle-5 {
+  width: 4px;
+  height: 4px;
+  top: 10%;
+  left: 90%;
+  animation-duration: 14s;
+  animation-delay: 4s;
+}
+
+.connection-line {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--c-accent), transparent);
+  opacity: 0.1;
+  animation: pulse-line 6s infinite ease-in-out;
+}
+
+@keyframes pulse-line {
+
+  0%,
+  100% {
+    opacity: 0.05;
+  }
+
+  50% {
+    opacity: 0.15;
   }
 }
