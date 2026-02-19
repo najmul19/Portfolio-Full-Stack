@@ -3,6 +3,12 @@ import MainLayout from './layouts/MainLayout';
 import Home from './pages/public/Home';
 import Projects from './pages/public/Projects';
 import Contact from './pages/public/Contact';
+import Login from './pages/admin/Login';
+import Dashboard from './pages/admin/Dashboard';
+import AdminLayout from './layouts/AdminLayout';
+import ProtectedRoute from './components/admin/ProtectedRoute';
+import AdminProjectList from './pages/admin/AdminProjectList';
+import AdminSkillList from './pages/admin/AdminSkillList';
 
 function App() {
   return (
@@ -17,8 +23,17 @@ function App() {
           <Route path="contact" element={<Contact />} />
         </Route>
 
-        {/* Admin Routes will go here later */}
-        {/* <Route path="/admin" element={<AdminLayout />}>...</Route> */}
+        <Route path="/login" element={<Login />} />
+
+        {/* Admin Routes */}
+        <Route path="/admin" element={<ProtectedRoute />}>
+          <Route element={<AdminLayout />}>
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="projects" element={<AdminProjectList />} />
+            <Route path="skills" element={<AdminSkillList />} />
+            {/* Add other admin routes here */}
+          </Route>
+        </Route>
       </Routes>
     </BrowserRouter>
   );
