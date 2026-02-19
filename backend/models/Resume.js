@@ -20,14 +20,13 @@ const resumeSchema = new mongoose.Schema({
 });
 
 // Ensure only one resume is active at a time
-resumeSchema.pre('save', async function (next) {
+resumeSchema.pre('save', async function () {
     if (this.isActive) {
         await this.constructor.updateMany(
             { _id: { $ne: this._id } },
             { isActive: false }
         );
     }
-    next();
 });
 
 module.exports = mongoose.model('Resume', resumeSchema);

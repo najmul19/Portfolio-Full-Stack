@@ -42,34 +42,41 @@ const AdminCertificationList = () => {
             return;
         }
 
+        // 10MB limit
+        const MAX_SIZE = 10 * 1024 * 1024;
+        if (file.size > MAX_SIZE) {
+            alert(`File is too large (${(file.size / 1024 / 1024).toFixed(1)}MB). Maximum allowed is 10MB.`);
+            return;
+        }
+
         setUploading(true);
         try {
-            if (isImage) {
-                // Upload image to ImgBB
-                const apiKey = import.meta.env.VITE_IMGBB_API_KEY;
-                if (!apiKey) { alert('Please configure VITE_IMGBB_API_KEY in your .env file'); return; }
+            const base64 = await toBase64(file);
 
-                const base64 = await toBase64(file);
-                const base64Data = base64.split(',')[1];
+            // Call our new backend upload endpoint
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({
+                    dataUri: base64,
+                    filename: file.name
+                })
+            });
 
-                const fd = new FormData();
-                fd.append('image', base64Data);
+            const json = await res.json();
+            if (!json.success) throw new Error(json.error || 'Upload failed');
 
-                const res = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
-                    method: 'POST', body: fd,
-                });
-                const json = await res.json();
-                if (!json.success) throw new Error('ImgBB upload failed');
+            const url = json.url;
+            setFormData(prev => ({
+                ...prev,
+                fileUrl: url,
+                fileType: isImage ? 'image' : 'pdf'
+            }));
+            setFilePreview({ url, type: isImage ? 'image' : 'pdf' });
 
-                const url = json.data.url;
-                setFormData(prev => ({ ...prev, fileUrl: url, fileType: 'image' }));
-                setFilePreview({ url, type: 'image' });
-            } else {
-                // PDF — store as base64 data URL (no external host needed)
-                const base64 = await toBase64(file);
-                setFormData(prev => ({ ...prev, fileUrl: base64, fileType: 'pdf' }));
-                setFilePreview({ url: base64, type: 'pdf' });
-            }
         } catch (err) {
             console.error(err);
             alert('File upload failed: ' + err.message);

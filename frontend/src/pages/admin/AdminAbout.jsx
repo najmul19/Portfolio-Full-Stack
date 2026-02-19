@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import aboutService from '../../services/aboutService'; // Ensure this service exists
+import aboutService from '../../services/aboutService';
 
 const AdminAbout = () => {
     const [formData, setFormData] = useState({
         name: '',
         title: '',
-        bio: '',
+        description: '',
         email: '',
         phone: '',
         location: '',
-        socials: {
+        social: {
             github: '',
             linkedin: '',
             twitter: '',
@@ -18,6 +18,7 @@ const AdminAbout = () => {
         avatar: ''
     });
     const [loading, setLoading] = useState(true);
+    const [successMsg, setSuccessMsg] = useState('');
 
     useEffect(() => {
         loadAbout();
@@ -57,15 +58,16 @@ const AdminAbout = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Check if we are updating (if we have an ID or just put to singleton endpoint)
-            // Typically About is a singleton.
-            // aboutService.update(formData)
-            if (formData._id) {
-                await aboutService.update(formData._id, formData);
+            // Strip MongoDB metadata before sending
+            const { _id, __v, createdAt, updatedAt, ...cleanData } = formData;
+
+            if (_id) {
+                await aboutService.update(_id, cleanData);
             } else {
-                await aboutService.create(formData);
+                await aboutService.create(cleanData);
             }
-            alert('Profile updated successfully!');
+            setSuccessMsg('Profile updated successfully!');
+            setTimeout(() => setSuccessMsg(''), 3000);
             loadAbout();
         } catch (error) {
             console.error(error);
@@ -78,6 +80,11 @@ const AdminAbout = () => {
     return (
         <div>
             <h1 className="text-3xl font-bold mb-6">Manage Profile & Socials</h1>
+            {successMsg && (
+                <div className="bg-green-600 text-white px-4 py-3 rounded mb-4 max-w-4xl">
+                    {successMsg}
+                </div>
+            )}
             <form onSubmit={handleSubmit} className="bg-secondary p-6 rounded space-y-6 max-w-4xl">
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -91,7 +98,7 @@ const AdminAbout = () => {
                     </div>
                     <div className="md:col-span-2">
                         <label className="block text-gray-400 mb-1">Bio</label>
-                        <textarea name="bio" value={formData.bio} onChange={handleChange} rows="4" className="w-full p-2 rounded bg-dark-bg border border-gray-600 text-white"></textarea>
+                        <textarea name="description" value={formData.description} onChange={handleChange} rows="4" className="w-full p-2 rounded bg-dark-bg border border-gray-600 text-white"></textarea>
                     </div>
                     <div>
                         <label className="block text-gray-400 mb-1">Email</label>

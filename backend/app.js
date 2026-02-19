@@ -25,8 +25,11 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Body Parsing Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
 
 // Compression Middleware
 app.use(compression());
@@ -44,6 +47,7 @@ const authRoutes = require('./routes/authRoutes');
 const resumeRoutes = require('./routes/resumeRoutes');
 const achievementRoutes = require('./routes/achievementRoutes');
 const testimonialRoutes = require('./routes/testimonialRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
 
 // Mount Routers
 app.use('/api/projects', projectRoutes);
@@ -58,6 +62,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/resumes', resumeRoutes);
 app.use('/api/achievements', achievementRoutes);
 app.use('/api/testimonials', testimonialRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // Routes (Mounting placeholder)
 app.get('/', (req, res) => {

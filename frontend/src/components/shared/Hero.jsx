@@ -7,7 +7,7 @@ const Hero = () => {
     useEffect(() => {
         const fetchAbout = async () => {
             try {
-                const data = await aboutService.get();
+                const data = await aboutService.getAbout();
                 setAbout(data.data);
             } catch (error) {
                 console.error('Error fetching about data:', error);

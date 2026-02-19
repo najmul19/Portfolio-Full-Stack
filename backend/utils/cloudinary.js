@@ -13,10 +13,11 @@ cloudinary.config({
  * @returns {Promise<string>} - secure URL of the uploaded file
  */
 const uploadToCloudinary = async (dataUri, options = {}) => {
+    const { resource_type = 'auto', ...rest } = options;
     const result = await cloudinary.uploader.upload(dataUri, {
-        resource_type: 'auto',   // handles both images and PDFs
+        resource_type,
         folder: 'portfolio/certificates',
-        ...options,
+        ...rest,
     });
     return result.secure_url;
 };

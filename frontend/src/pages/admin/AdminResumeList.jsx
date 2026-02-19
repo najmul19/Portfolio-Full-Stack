@@ -59,10 +59,45 @@ const AdminResumeList = () => {
         setFormData({ ...formData, [e.target.name]: value });
     };
 
+    /**
+     * Convert various Google Drive URL formats to a viewable/downloadable link.
+     * Supports:
+     *   - https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+     *   - https://drive.google.com/open?id=FILE_ID
+     *   - https://drive.google.com/uc?export=download&id=FILE_ID
+     * Returns the original URL if it's not a Google Drive link.
+     */
+    const normalizeGoogleDriveUrl = (url) => {
+        if (!url) return url;
+
+        let fileId = null;
+
+        // Match /file/d/FILE_ID/
+        const fileMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+        if (fileMatch) fileId = fileMatch[1];
+
+        // Match ?id=FILE_ID or &id=FILE_ID
+        if (!fileId) {
+            const idMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+            if (idMatch) fileId = idMatch[1];
+        }
+
+        if (fileId) {
+            // Return a direct-view URL that works in browser
+            return `https://drive.google.com/file/d/${fileId}/preview`;
+        }
+
+        return url; // Not a Google Drive URL, return as-is
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await resumeService.create(formData);
+            const submittedData = {
+                ...formData,
+                fileUrl: normalizeGoogleDriveUrl(formData.fileUrl),
+            };
+            await resumeService.create(submittedData);
             setFormData({ version: '', fileUrl: '', isActive: false });
             loadResumes();
         } catch (error) {
@@ -106,6 +141,7 @@ const AdminResumeList = () => {
                     <div>
                         <label className="block text-gray-400 mb-1">PDF URL</label>
                         <input name="fileUrl" value={formData.fileUrl} onChange={handleChange} placeholder="https://example.com/my-resume.pdf" className="w-full p-2 rounded bg-dark-bg border border-gray-600 text-white" required />
+                        <p className="text-gray-500 text-xs mt-1">Paste any Google Drive share link — it will be auto-converted to a viewable format.</p>
                     </div>
 
                     <label className="flex items-center gap-2 text-white">
