@@ -13,6 +13,7 @@ const MainLayout = () => {
                         <a href="/" className="hover:text-accent">Home</a>
                         <a href="/projects" className="hover:text-accent">Projects</a>
                         <a href="/contact" className="hover:text-accent">Contact</a>
+                        <a href="/login" className="hover:text-accent">Login</a>
                     </div>
                 </div>
             </nav>

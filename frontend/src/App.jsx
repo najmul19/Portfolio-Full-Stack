@@ -11,6 +11,13 @@ import AdminProjectList from './pages/admin/AdminProjectList';
 import AdminSkillList from './pages/admin/AdminSkillList';
 import AdminExperienceList from './pages/admin/AdminExperienceList';
 import AdminMessageList from './pages/admin/AdminMessageList';
+import AdminCertificationList from './pages/admin/AdminCertificationList';
+import AdminEducationList from './pages/admin/AdminEducationList';
+import AdminAchievementList from './pages/admin/AdminAchievementList';
+import AdminTestimonialList from './pages/admin/AdminTestimonialList';
+import AdminPublicationList from './pages/admin/AdminPublicationList';
+import AdminResumeList from './pages/admin/AdminResumeList';
+import AdminAbout from './pages/admin/AdminAbout';
 
 function App() {
   return (
@@ -35,6 +42,13 @@ function App() {
             <Route path="skills" element={<AdminSkillList />} />
             <Route path="experience" element={<AdminExperienceList />} />
             <Route path="messages" element={<AdminMessageList />} />
+            <Route path="education" element={<AdminEducationList />} />
+            <Route path="certificates" element={<AdminCertificationList />} />
+            <Route path="achievements" element={<AdminAchievementList />} />
+            <Route path="testimonials" element={<AdminTestimonialList />} />
+            <Route path="publications" element={<AdminPublicationList />} />
+            <Route path="resume" element={<AdminResumeList />} />
+            <Route path="about" element={<AdminAbout />} />
           </Route>
         </Route>
       </Routes>
