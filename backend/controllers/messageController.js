@@ -7,6 +7,23 @@ exports.createMessage = async (req, res, next) => {
     try {
         const message = await Message.create(req.body);
 
+        // Send email notification to admin (or the user, depending on requirement. Usually admin wants to know)
+        // For this portfolio, we likely want to notify the Admin (YOU) that someone contacted you.
+        try {
+            const sendEmail = require('../utils/sendEmail');
+
+            // Notify Admin
+            await sendEmail({
+                email: process.env.FROM_EMAIL, // Or your personal email
+                subject: `New Contact Form Submission: ${req.body.subject}`,
+                message: `You have received a new message from ${req.body.name} (${req.body.email}).\n\nMessage:\n${req.body.message}`,
+            });
+
+        } catch (err) {
+            console.error('Email could not be sent', err);
+            // We don't want to fail the request if email fails, just log it
+        }
+
         res.status(201).json({
             success: true,
             data: message,
