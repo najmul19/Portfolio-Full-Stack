@@ -4,8 +4,8 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const compression = require('compression');
 
-// Import middleware (using the files we created earlier)
-// const { notFound, errorHandler } = require('./middleware/errorMiddleware');
+// Import middleware
+const errorHandler = require('./middleware/errorMiddleware');
 
 const app = express();
 
@@ -61,7 +61,7 @@ app.get('/', (req, res) => {
 // app.use('/api/v1/resource', resourceRoutes); // Example
 
 // Error Handling Middleware
-// app.use(notFound);
-// app.use(errorHandler);
+// app.use(notFound); // You can add a 404 handler here if you like
+app.use(errorHandler);
 
 module.exports = app;
