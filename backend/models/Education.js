@@ -51,11 +51,11 @@ const educationSchema = new mongoose.Schema(
 );
 
 // Pre-save middleware to handle 'current' flag
-educationSchema.pre('save', function (next) {
+educationSchema.pre('save', async function () {
     if (this.current) {
         this.endDate = undefined;
     }
-    next();
 });
+
 
 module.exports = mongoose.model('Education', educationSchema);

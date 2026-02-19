@@ -38,8 +38,9 @@ const AdminEducationList = () => {
             setEditingId(null);
             loadEducations();
         } catch (error) {
-            console.error(error);
-            alert('Error saving education');
+            console.error('Full error:', error);
+            const msg = error?.response?.data?.error || error?.message || 'Unknown error';
+            alert('Error saving education: ' + msg);
         }
     };
 
@@ -76,9 +77,21 @@ const AdminEducationList = () => {
                 <input name="degree" value={formData.degree} onChange={handleChange} placeholder="Degree" className="p-2 rounded bg-dark-bg border border-gray-600 text-white" required />
                 <input name="fieldOfStudy" value={formData.fieldOfStudy} onChange={handleChange} placeholder="Field of Study" className="p-2 rounded bg-dark-bg border border-gray-600 text-white" required />
 
-                <div className="flex gap-4">
-                    <input type="date" name="startDate" value={formData.startDate} onChange={handleChange} className="flex-1 p-2 rounded bg-dark-bg border border-gray-600 text-white" required />
-                    <input type="date" name="endDate" value={formData.endDate} onChange={handleChange} disabled={formData.current} className="flex-1 p-2 rounded bg-dark-bg border border-gray-600 text-white" />
+                <input type="date" name="startDate" value={formData.startDate} onChange={handleChange} className="p-2 rounded bg-dark-bg border border-gray-600 text-white" required />
+
+                <div className="relative">
+                    <input
+                        type="date"
+                        name="endDate"
+                        value={formData.endDate}
+                        onChange={handleChange}
+                        disabled={formData.current}
+                        className="w-full p-2 rounded bg-dark-bg border border-gray-600 text-white"
+                        style={{ opacity: formData.current ? 0.4 : 1, cursor: formData.current ? 'not-allowed' : 'auto' }}
+                    />
+                    {formData.current && (
+                        <span className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm pointer-events-none">Present</span>
+                    )}
                 </div>
 
                 <label className="flex items-center gap-2 text-white">

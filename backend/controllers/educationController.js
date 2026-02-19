@@ -51,7 +51,13 @@ exports.getSingleEducation = async (req, res, next) => {
 // @access  Private (Admin only)
 exports.createEducation = async (req, res, next) => {
     try {
-        const education = await Education.create(req.body);
+        const body = { ...req.body };
+        // Strip empty endDate so Mongoose doesn't try to cast "" to a Date
+        if (!body.endDate || body.endDate === '') delete body.endDate;
+        // If current is true, always remove endDate
+        if (body.current) delete body.endDate;
+
+        const education = await Education.create(body);
 
         res.status(201).json({
             success: true,
@@ -67,7 +73,7 @@ exports.createEducation = async (req, res, next) => {
 // @access  Private (Admin only)
 exports.updateEducation = async (req, res, next) => {
     try {
-        let education = await Education.findById(req.params.id);
+        const education = await Education.findById(req.params.id);
 
         if (!education) {
             return res.status(404).json({
@@ -76,10 +82,18 @@ exports.updateEducation = async (req, res, next) => {
             });
         }
 
-        education = await Education.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true,
+        // Apply incoming fields
+        Object.keys(req.body).forEach((key) => {
+            education[key] = req.body[key];
         });
+
+        // Strip empty endDate so Mongoose doesn't try to cast "" to a Date
+        if (!education.endDate || education.endDate === '') {
+            education.endDate = undefined;
+        }
+
+        // Use .save() so pre-save middleware runs (clears endDate when current=true)
+        await education.save();
 
         res.status(200).json({
             success: true,

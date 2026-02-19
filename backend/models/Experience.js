@@ -52,11 +52,10 @@ const experienceSchema = new mongoose.Schema(
 );
 
 // Pre-save middleware to handle 'current' flag
-experienceSchema.pre('save', function (next) {
+experienceSchema.pre('save', async function () {
     if (this.current) {
         this.endDate = undefined;
     }
-    next();
 });
 
 module.exports = mongoose.model('Experience', experienceSchema);

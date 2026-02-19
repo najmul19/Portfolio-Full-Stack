@@ -31,6 +31,15 @@ const certificateSchema = new mongoose.Schema(
             type: String,
             maxlength: [500, 'Description can not be more than 500 characters'],
         },
+        fileUrl: {
+            type: String,
+            default: null,
+        },
+        fileType: {
+            type: String,
+            enum: ['image', 'pdf', null],
+            default: null,
+        },
     },
     {
         timestamps: true,
