@@ -9,6 +9,8 @@ import AdminLayout from './layouts/AdminLayout';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 import AdminProjectList from './pages/admin/AdminProjectList';
 import AdminSkillList from './pages/admin/AdminSkillList';
+import AdminExperienceList from './pages/admin/AdminExperienceList';
+import AdminMessageList from './pages/admin/AdminMessageList';
 
 function App() {
   return (
@@ -31,7 +33,8 @@ function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="projects" element={<AdminProjectList />} />
             <Route path="skills" element={<AdminSkillList />} />
-            {/* Add other admin routes here */}
+            <Route path="experience" element={<AdminExperienceList />} />
+            <Route path="messages" element={<AdminMessageList />} />
           </Route>
         </Route>
       </Routes>

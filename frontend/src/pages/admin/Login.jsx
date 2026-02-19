@@ -1,52 +1,138 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import authService from '../../services/authService';
+import { FaUserShield, FaEnvelope, FaLock, FaExclamationCircle } from 'react-icons/fa';
 
 const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    });
+    const { email, password } = formData;
+
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // Redirect if already logged in
+    useEffect(() => {
+        const checkAuth = () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                navigate('/admin/dashboard');
+            }
+        };
+        checkAuth();
+    }, [navigate]);
+
+    const handleChange = (e) => {
+        setFormData((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value
+        }));
+        // Clear error when user types
+        if (error) setError('');
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        setError('');
+
         try {
             await authService.login({ email, password });
-            navigate('/admin/dashboard');
+            // Login successful
+            // Redirect to where they came from or dashboard
+            const from = location.state?.from?.pathname || '/admin/dashboard';
+            navigate(from, { replace: true });
         } catch (err) {
-            setError(err.response?.data?.error || 'Login failed');
+            const errorMsg = err.response?.data?.error || 'Invalid credentials. Please try again.';
+            setError(errorMsg);
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <div className="flex justify-center items-center h-screen bg-dark-bg">
-            <form onSubmit={handleSubmit} className="bg-secondary p-8 rounded shadow-md w-80">
-                <h2 className="text-2xl font-bold mb-6 text-center text-white">Admin Login</h2>
-                {error && <p className="text-red-500 mb-4 text-sm">{error}</p>}
-                <div className="mb-4">
-                    <label className="block text-gray-300 mb-2">Email</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="w-full p-2 rounded bg-dark-bg text-white border border-gray-600 focus:border-accent outline-none"
-                        required
-                    />
+        <div className="min-h-screen flex items-center justify-center bg-dark-bg px-4">
+            <div className="max-w-md w-full bg-secondary rounded-lg shadow-2xl overflow-hidden border border-gray-700">
+                <div className="p-8">
+                    <div className="flex flex-col items-center mb-8">
+                        <div className="bg-accent/10 p-4 rounded-full mb-4">
+                            <FaUserShield className="text-4xl text-accent" />
+                        </div>
+                        <h2 className="text-2xl font-bold text-white">Admin Portal</h2>
+                        <p className="text-gray-400 text-sm mt-1">Please sign in to continue</p>
+                    </div>
+
+                    {error && (
+                        <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded mb-6 flex items-center gap-2 text-sm">
+                            <FaExclamationCircle className="flex-shrink-0" />
+                            <span>{error}</span>
+                        </div>
+                    )}
+
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <div>
+                            <label className="block text-gray-400 text-xs font-bold uppercase mb-2" htmlFor="email">
+                                Email Address
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <FaEnvelope className="text-gray-500" />
+                                </div>
+                                <input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    value={email}
+                                    onChange={handleChange}
+                                    className="w-full bg-dark-bg text-white border border-gray-600 rounded py-3 pl-10 pr-3 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
+                                    placeholder="admin@example.com"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-gray-400 text-xs font-bold uppercase mb-2" htmlFor="password">
+                                Password
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <FaLock className="text-gray-500" />
+                                </div>
+                                <input
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    value={password}
+                                    onChange={handleChange}
+                                    className="w-full bg-dark-bg text-white border border-gray-600 rounded py-3 pl-10 pr-3 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
+                                    placeholder="••••••••"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className={`w-full bg-accent text-primary font-bold py-3 px-4 rounded transition duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent ${loading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-opacity-90'
+                                }`}
+                        >
+                            {loading ? 'Authenticating...' : 'Sign In'}
+                        </button>
+                    </form>
                 </div>
-                <div className="mb-6">
-                    <label className="block text-gray-300 mb-2">Password</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full p-2 rounded bg-dark-bg text-white border border-gray-600 focus:border-accent outline-none"
-                        required
-                    />
+                <div className="bg-gray-800/50 px-8 py-4 border-t border-gray-700 text-center">
+                    <p className="text-xs text-gray-500">
+                        &copy; {new Date().getFullYear()} Portfolio Admin. All rights reserved.
+                    </p>
                 </div>
-                <button type="submit" className="w-full bg-accent text-primary font-bold py-2 rounded hover:bg-opacity-90">
-                    Login
-                </button>
-            </form>
+            </div>
         </div>
     );
 };
