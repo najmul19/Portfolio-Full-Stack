@@ -16,7 +16,7 @@ const sidebarLinks = [
     { path: '/admin/about', label: 'About Me', icon: FiUser },
     { path: '/admin/education', label: 'Education', icon: FiBook },
     { path: '/admin/experience', label: 'Experience', icon: FiBriefcase },
-    { path: '/admin/certificates', label: 'Certifications', icon: FiAward },
+    { path: '/admin/certifications', label: 'Certifications', icon: FiAward },
     { path: '/admin/publications', label: 'Publications', icon: FiBookOpen },
     { path: '/admin/achievements', label: 'Achievements', icon: FiFileText },
     { path: '/admin/testimonials', label: 'Testimonials', icon: FiMessageSquare },

@@ -25,6 +25,7 @@ import AdminPublicationList from './pages/admin/AdminPublicationList';
 import AdminAchievementList from './pages/admin/AdminAchievementList';
 import AdminTestimonialList from './pages/admin/AdminTestimonialList';
 import AdminMessageList from './pages/admin/AdminMessageList';
+import AdminResumeList from './pages/admin/AdminResumeList';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 
 function App() {
@@ -54,7 +55,8 @@ function App() {
                 {/* Protected Admin Routes */}
                 <Route element={<ProtectedRoute />}>
                     <Route path="/admin" element={<AdminLayout />}>
-                        <Route index element={<Dashboard />} />
+                        <Route index element={<Navigate to="/admin/dashboard" replace />} />
+                        <Route path="dashboard" element={<Dashboard />} />
                         <Route path="about" element={<AdminAbout />} />
                         <Route path="skills" element={<AdminSkillList />} />
                         <Route path="experience" element={<AdminExperienceList />} />
@@ -65,6 +67,7 @@ function App() {
                         <Route path="achievements" element={<AdminAchievementList />} />
                         <Route path="testimonials" element={<AdminTestimonialList />} />
                         <Route path="messages" element={<AdminMessageList />} />
+                        <Route path="resume" element={<AdminResumeList />} />
                     </Route>
                 </Route>
 

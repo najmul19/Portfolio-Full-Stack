@@ -56,8 +56,8 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-dark-bg px-4">
-            <div className="max-w-md w-full bg-secondary rounded-lg shadow-2xl overflow-hidden border border-gray-700">
+        <div className="min-h-screen flex items-center justify-center bg-[var(--c-bg)] px-4">
+            <div className="max-w-md w-full bg-[var(--c-bg-alt)] rounded-2xl shadow-2xl overflow-hidden border border-[var(--c-border-light)] glass-strong">
                 <div className="p-8">
                     <div className="flex flex-col items-center mb-8">
                         <div className="bg-accent/10 p-4 rounded-full mb-4">
@@ -89,8 +89,8 @@ const Login = () => {
                                     type="email"
                                     value={email}
                                     onChange={handleChange}
-                                    className="w-full bg-dark-bg text-white border border-gray-600 rounded py-3 pl-10 pr-3 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
-                                    placeholder="admin@example.com"
+                                    className="w-full bg-[var(--c-bg)] text-[var(--c-text)] border border-[var(--c-border)] rounded-xl py-3 pl-10 pr-3 focus:outline-none focus:border-[var(--c-accent)] focus:ring-1 focus:ring-[var(--c-accent)] transition-all"
+                                    placeholder="your-email@example.com"
                                     required
                                 />
                             </div>
@@ -110,7 +110,7 @@ const Login = () => {
                                     type="password"
                                     value={password}
                                     onChange={handleChange}
-                                    className="w-full bg-dark-bg text-white border border-gray-600 rounded py-3 pl-10 pr-3 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
+                                    className="w-full bg-[var(--c-bg)] text-[var(--c-text)] border border-[var(--c-border)] rounded-xl py-3 pl-10 pr-3 focus:outline-none focus:border-[var(--c-accent)] focus:ring-1 focus:ring-[var(--c-accent)] transition-all"
                                     placeholder="••••••••"
                                     required
                                 />
@@ -120,7 +120,7 @@ const Login = () => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className={`w-full bg-accent text-primary font-bold py-3 px-4 rounded transition duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent ${loading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-opacity-90'
+                            className={`w-full bg-[var(--c-accent)] text-white font-bold py-3 px-4 rounded-xl transition duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--c-accent)] ${loading ? 'opacity-70 cursor-not-allowed' : 'hover:brightness-110'
                                 }`}
                         >
                             {loading ? 'Authenticating...' : 'Sign In'}
