@@ -3,6 +3,7 @@ import { useTheme } from '../context/ThemeContext';
 import { FaSun, FaMoon, FaGithub, FaLinkedin, FaEnvelope, FaFacebook, FaYoutube } from 'react-icons/fa';
 import { FiMenu, FiX } from 'react-icons/fi';
 import { useEffect, useRef, useState } from 'react';
+import Logo from '../components/shared/Logo';
 
 const navLinks = [
     { path: '/', label: 'Home' },
@@ -198,11 +199,16 @@ const MainLayout = () => {
                     {/* Logo */}
                     <Link
                         to="/"
-                        className="text-xl md:text-2xl font-bold tracking-tighter"
-                        style={{ fontFamily: 'var(--font-heading)' }}
+                        className="flex items-center gap-2 group"
                         onClick={() => setMobileMenuOpen(false)}
                     >
-                        <span className="animated-gradient-text">MNI</span>
+                        <Logo isDark={isDark} className="w-8 h-8 md:w-10 md:h-10 transition-transform duration-500 group-hover:rotate-[360deg]" />
+                        <span
+                            className="text-xl md:text-2xl font-bold tracking-tighter"
+                            style={{ fontFamily: 'var(--font-heading)' }}
+                        >
+                            <span className="animated-gradient-text">MNI</span>
+                        </span>
                     </Link>
 
                     {/* Desktop Links + toggle */}
@@ -299,12 +305,15 @@ const MainLayout = () => {
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
                         {/* Brand */}
                         <div className="md:col-span-6">
-                            <h3
-                                className="text-2xl font-bold mb-4 tracking-tight"
-                                style={{ fontFamily: 'var(--font-heading)' }}
-                            >
-                                <span className="animated-gradient-text">MD Najmul Islam</span>
-                            </h3>
+                            <div className="flex items-center gap-3 mb-4">
+                                <Logo isDark={isDark} className="w-10 h-10" />
+                                <h3
+                                    className="text-2xl font-bold tracking-tight"
+                                    style={{ fontFamily: 'var(--font-heading)' }}
+                                >
+                                    <span className="animated-gradient-text">MD Najmul Islam</span>
+                                </h3>
+                            </div>
                             <p className="text-lg text-[var(--c-text-secondary)] max-w-md leading-relaxed">
                                 Building the future of AI through research and engineering.
                                 Focused on deep learning, automation, and full-stack excellence.
