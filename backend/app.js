@@ -9,6 +9,10 @@ const errorHandler = require('./middleware/errorMiddleware');
 
 const app = express();
 
+// Trust proxy for Render/Vercel (important for secure cookies/headers)
+app.set('trust proxy', 1);
+
+
 // Security Middleware
 app.use(helmet());
 
