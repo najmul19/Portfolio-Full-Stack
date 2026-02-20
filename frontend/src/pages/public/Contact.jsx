@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import messageService from '../../services/messageService';
 
 const Contact = () => {
@@ -10,6 +10,10 @@ const Contact = () => {
     });
     const [status, setStatus] = useState({ type: '', msg: '' });
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -32,24 +36,32 @@ const Contact = () => {
     };
 
     return (
-        <section className="py-20 px-4">
-            <div className="container mx-auto max-w-4xl">
-                <h1 className="text-4xl font-bold text-center mb-8">Get In Touch</h1>
-                <p className="text-gray-400 text-center mb-12">
-                    Have a question or want to work together? Fill out the form below.
-                </p>
+        <section className="py-32 px-6">
+            <div className="max-w-4xl mx-auto">
+                <div className="mb-16" data-aos="fade-down">
+                    <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tighter" style={{ fontFamily: 'var(--font-heading)' }}>
+                        Get In <span className="animated-gradient-text">Touch</span>
+                    </h1>
+                    <p className="text-xl text-[var(--c-text-secondary)] leading-relaxed max-w-2xl">
+                        Have a question or want to work together? Fill out the form below.
+                    </p>
+                </div>
 
-                <div className="bg-secondary p-8 rounded-lg shadow-lg">
+                <div
+                    className="panel p-8 md:p-12 shadow-2xl border border-[var(--c-border)] bg-[var(--c-bg-alt)]"
+                    data-aos="zoom-in"
+                    data-aos-duration="800"
+                >
                     {status.msg && (
-                        <div className={`p-4 mb-6 rounded ${status.type === 'success' ? 'bg-green-600/20 text-green-400' : 'bg-red-600/20 text-red-400'}`}>
+                        <div className={`p-5 mb-8 rounded-2xl font-bold tracking-tight border ${status.type === 'success' ? 'bg-green-600/10 text-green-400 border-green-600/20' : 'bg-red-600/10 text-red-400 border-red-600/20'}`}>
                             {status.msg}
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label htmlFor="name" className="block text-gray-300 mb-2">Name</label>
+                    <form onSubmit={handleSubmit} className="space-y-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div data-aos="fade-right" data-aos-delay="200">
+                                <label htmlFor="name" className="block text-sm font-bold uppercase tracking-widest text-[var(--c-text-muted)] mb-3">Full Name</label>
                                 <input
                                     type="text"
                                     id="name"
@@ -57,12 +69,12 @@ const Contact = () => {
                                     value={formData.name}
                                     onChange={handleChange}
                                     required
-                                    className="w-full p-3 rounded bg-dark-bg border border-gray-600 focus:border-accent outline-none text-white transition focus:ring-1 focus:ring-accent"
+                                    className="w-full px-5 py-4 rounded-2xl bg-[var(--c-bg)] border border-[var(--c-border)] focus:border-[var(--c-accent)] outline-none text-[var(--c-text)] transition-all focus:ring-1 focus:ring-[var(--c-accent)]/50 font-medium"
                                     placeholder="John Doe"
                                 />
                             </div>
-                            <div>
-                                <label htmlFor="email" className="block text-gray-300 mb-2">Email</label>
+                            <div data-aos="fade-left" data-aos-delay="200">
+                                <label htmlFor="email" className="block text-sm font-bold uppercase tracking-widest text-[var(--c-text-muted)] mb-3">Email Address</label>
                                 <input
                                     type="email"
                                     id="email"
@@ -70,14 +82,14 @@ const Contact = () => {
                                     value={formData.email}
                                     onChange={handleChange}
                                     required
-                                    className="w-full p-3 rounded bg-dark-bg border border-gray-600 focus:border-accent outline-none text-white transition focus:ring-1 focus:ring-accent"
+                                    className="w-full px-5 py-4 rounded-2xl bg-[var(--c-bg)] border border-[var(--c-border)] focus:border-[var(--c-accent)] outline-none text-[var(--c-text)] transition-all focus:ring-1 focus:ring-[var(--c-accent)]/50 font-medium"
                                     placeholder="john@example.com"
                                 />
                             </div>
                         </div>
 
-                        <div>
-                            <label htmlFor="subject" className="block text-gray-300 mb-2">Subject</label>
+                        <div data-aos="fade-up" data-aos-delay="300">
+                            <label htmlFor="subject" className="block text-sm font-bold uppercase tracking-widest text-[var(--c-text-muted)] mb-3">Subject</label>
                             <input
                                 type="text"
                                 id="subject"
@@ -85,21 +97,21 @@ const Contact = () => {
                                 value={formData.subject}
                                 onChange={handleChange}
                                 required
-                                className="w-full p-3 rounded bg-dark-bg border border-gray-600 focus:border-accent outline-none text-white transition focus:ring-1 focus:ring-accent"
+                                className="w-full px-5 py-4 rounded-2xl bg-[var(--c-bg)] border border-[var(--c-border)] focus:border-[var(--c-accent)] outline-none text-[var(--c-text)] transition-all focus:ring-1 focus:ring-[var(--c-accent)]/50 font-medium"
                                 placeholder="Project Inquiry"
                             />
                         </div>
 
-                        <div>
-                            <label htmlFor="message" className="block text-gray-300 mb-2">Message</label>
+                        <div data-aos="fade-up" data-aos-delay="400">
+                            <label htmlFor="message" className="block text-sm font-bold uppercase tracking-widest text-[var(--c-text-muted)] mb-3">Message</label>
                             <textarea
                                 id="message"
                                 name="message"
                                 value={formData.message}
                                 onChange={handleChange}
                                 required
-                                rows="5"
-                                className="w-full p-3 rounded bg-dark-bg border border-gray-600 focus:border-accent outline-none text-white transition focus:ring-1 focus:ring-accent resize-none"
+                                rows="6"
+                                className="w-full px-5 py-4 rounded-2xl bg-[var(--c-bg)] border border-[var(--c-border)] focus:border-[var(--c-accent)] outline-none text-[var(--c-text)] transition-all focus:ring-1 focus:ring-[var(--c-accent)]/50 font-medium resize-none shadow-inner"
                                 placeholder="Tell me about your project..."
                             ></textarea>
                         </div>
@@ -107,18 +119,20 @@ const Contact = () => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className={`w-full py-4 rounded font-bold text-primary transition duration-300 ${loading ? 'bg-gray-500 cursor-not-allowed' : 'bg-accent hover:bg-opacity-90 transform hover:-translate-y-1'
+                            data-aos="fade-up"
+                            data-aos-delay="500"
+                            className={`w-full py-5 rounded-2xl font-bold text-white transition-all duration-300 shadow-xl ${loading ? 'bg-slate-500 cursor-not-allowed text-white' : 'bg-[var(--c-accent)] hover:scale-[1.01] hover:shadow-[0_20px_40px_-10px_rgba(43,108,238,0.4)]'
                                 }`}
                         >
-                            {loading ? 'Sending...' : 'Send Message'}
+                            {loading ? 'Sending Message...' : 'Send Message'}
                         </button>
                     </form>
                 </div>
 
-                <div className="mt-12 text-center text-gray-400">
-                    <p>Or email me directly at</p>
-                    <a href="mailto:your.email@example.com" className="text-accent hover:underline text-lg">
-                        your.email@example.com
+                <div className="mt-20 text-center" data-aos="fade-up" data-aos-delay="600">
+                    <p className="text-[var(--c-text-muted)] font-medium mb-4">Or email me directly at</p>
+                    <a href="mailto:inajmul605@gmail.com" className="text-2xl font-bold text-[var(--c-text)] hover:text-[var(--c-accent)] transition-colors tracking-tight">
+                        inajmul605@gmail.com
                     </a>
                 </div>
             </div>

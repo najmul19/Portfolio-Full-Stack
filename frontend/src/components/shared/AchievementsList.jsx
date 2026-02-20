@@ -34,14 +34,11 @@ const AchievementsList = () => {
     };
 
     return (
-        <section className="py-24 px-6 relative overflow-hidden">
-            {/* Background decorative elements */}
-            <div className="absolute top-0 left-0 w-full h-full bg-grid-pattern opacity-5 pointer-events-none" />
-
-            <div className="max-w-6xl mx-auto relative z-10">
-                <div className="text-center mb-16">
-                    <h2 className="section-heading section-heading-center">Honors & Achievements</h2>
-                    <p className="text-center mt-4 max-w-2xl mx-auto" style={{ color: 'var(--c-text-secondary)' }}>
+        <section className="">
+            <div className="">
+                <div className="mb-16">
+                    <h2 className="section-heading">Honors & Achievements</h2>
+                    <p className="mt-2 text-[#94a3b8] text-lg max-w-2xl">
                         Recognition for contributions to research, technology, and community.
                     </p>
                 </div>
@@ -50,35 +47,29 @@ const AchievementsList = () => {
                     {achievements.map((item, index) => (
                         <div
                             key={item._id}
-                            className="glass p-8 rounded-2xl group hover:-translate-y-2 transition-all duration-300 relative overflow-hidden"
-                            style={{ borderTop: '4px solid var(--c-accent)' }}
+                            className="card p-10 group flex flex-col h-full hover:border-white/10 transition-all duration-300 relative"
+                            data-aos="fade-up"
+                            data-aos-delay={index * 150}
                         >
-                            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                                <FaStar className="text-6xl" />
-                            </div>
-
-                            <div className="flex items-start gap-4 mb-6">
-                                <div className="p-3 rounded-xl bg-gradient-to-br from-yellow-400/20 to-orange-500/20 border border-yellow-500/30">
+                            <div className="flex items-start justify-between mb-8">
+                                <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white/5 border border-white/5 text-[var(--c-accent)] group-hover:scale-110 transition-transform duration-300 shadow-xl">
                                     {renderIcon(item.icon)}
                                 </div>
-                                <div>
-                                    <span
-                                        className="text-xs font-mono py-1 px-2 rounded-full mb-2 inline-block"
-                                        style={{ background: 'var(--c-bg-alt)', color: 'var(--c-text-muted)' }}
-                                    >
-                                        {new Date(item.date).getFullYear()}
-                                    </span>
-                                </div>
+                                <span
+                                    className="tag text-xs font-mono"
+                                >
+                                    {new Date(item.date).getFullYear()}
+                                </span>
                             </div>
 
                             <h3
-                                className="text-xl font-bold mb-3 group-hover:text-accent transition-colors"
+                                className="text-2xl font-bold mb-4 tracking-tight group-hover:text-[var(--c-accent)] transition-colors"
                                 style={{ fontFamily: 'var(--font-heading)' }}
                             >
                                 {item.title}
                             </h3>
 
-                            <p className="text-sm leading-relaxed" style={{ color: 'var(--c-text-secondary)' }}>
+                            <p className="text-lg leading-relaxed text-[#94a3b8] flex-1">
                                 {item.description}
                             </p>
                         </div>

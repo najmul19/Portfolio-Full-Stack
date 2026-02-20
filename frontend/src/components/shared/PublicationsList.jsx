@@ -20,24 +20,28 @@ const PublicationsList = () => {
     if (publications.length === 0) return null;
 
     return (
-        <section className="py-20 px-6" style={{ background: 'var(--c-bg-alt)' }}>
-            <div className="max-w-4xl mx-auto">
-                <h2 className="section-heading mb-10">Research Publications</h2>
+        <section className="">
+            <div className="">
+                <h2 className="section-heading mb-12">Research Publications</h2>
 
-                <div className="space-y-6">
-                    {publications.map(pub => (
-                        <div key={pub._id} className="card p-6 flex gap-5 items-start">
+                <div className="space-y-8">
+                    {publications.map((pub, idx) => (
+                        <div
+                            key={pub._id}
+                            className="card p-8 flex gap-8 items-start hover:border-white/10 transition-all duration-300"
+                            data-aos="fade-up"
+                            data-aos-delay={idx * 100}
+                        >
                             {/* Icon */}
                             <div
-                                className="hidden sm:flex flex-shrink-0 w-12 h-12 rounded-lg items-center justify-center"
-                                style={{ background: 'var(--c-accent-subtle)' }}
+                                className="hidden sm:flex flex-shrink-0 w-14 h-14 rounded-2xl items-center justify-center bg-white/5 border border-white/5"
                             >
-                                <FaBook className="text-xl" style={{ color: 'var(--c-accent)' }} />
+                                <FaBook className="text-xl text-[var(--c-accent)]" />
                             </div>
 
                             <div className="flex-1">
                                 <h3
-                                    className="text-lg font-bold mb-2 leading-tight"
+                                    className="text-xl font-bold mb-3 leading-tight"
                                     style={{ fontFamily: 'var(--font-heading)' }}
                                 >
                                     {pub.url ? (
@@ -45,13 +49,12 @@ const PublicationsList = () => {
                                             href={pub.url}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="hover:underline flex items-start gap-2 group"
+                                            className="hover:text-[var(--c-accent)] flex items-start gap-2 group transition-colors"
                                             style={{ color: 'var(--c-text)' }}
                                         >
-                                            {pub.title}
+                                            <span className="group-hover:text-[var(--c-accent)]">{pub.title}</span>
                                             <FaExternalLinkAlt
-                                                className="text-xs mt-1.5 opacity-50 group-hover:opacity-100 transition-opacity"
-                                                style={{ color: 'var(--c-accent)' }}
+                                                className="text-xs mt-2 opacity-30 group-hover:opacity-100 transition-opacity text-[var(--c-accent)]"
                                             />
                                         </a>
                                     ) : (
@@ -59,15 +62,16 @@ const PublicationsList = () => {
                                     )}
                                 </h3>
 
-                                <p className="text-sm mb-3" style={{ color: 'var(--c-text-secondary)' }}>
-                                    <span className="font-semibold" style={{ color: 'var(--c-text)' }}>
+                                <div className="flex items-center gap-3 text-sm mb-4">
+                                    <span className="px-3 py-1 rounded-full bg-white/5 text-[var(--c-accent)] font-semibold border border-white/5">
                                         {pub.publisher}
                                     </span>
-                                    <span className="dot-divider" />
-                                    {new Date(pub.date).getFullYear()}
-                                </p>
+                                    <span className="text-[#64748b]">
+                                        {new Date(pub.date).getFullYear()}
+                                    </span>
+                                </div>
 
-                                <p className="text-sm leading-relaxed" style={{ color: 'var(--c-text-muted)' }}>
+                                <p className="text-base leading-relaxed text-[#94a3b8]">
                                     {pub.description}
                                 </p>
                             </div>

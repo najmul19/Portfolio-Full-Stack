@@ -21,88 +21,68 @@ const EducationTimeline = () => {
     if (educations.length === 0) return null;
 
     return (
-        <section className="py-20 px-6" style={{ background: 'var(--c-bg-alt)' }}>
-            <div className="max-w-4xl mx-auto">
-                <h2 className="section-heading mb-10">Education</h2>
+        <section className="">
+            <div className="">
+                <h2 className="section-heading mb-12">Education</h2>
 
-                {/* Timeline */}
                 <div className="relative">
+                    {/* Vertical line - Subtle gradient */}
                     <div
-                        className="absolute top-0 bottom-0 left-[19px] w-px"
-                        style={{ background: 'var(--c-border)' }}
+                        className="absolute top-0 bottom-0 left-[23px] w-0.5 bg-gradient-to-b from-[var(--c-accent)] to-transparent opacity-20"
                     />
 
-                    <div className="space-y-8">
-                        {educations.map(edu => (
-                            <div key={edu._id} className="relative pl-12 group">
+                    <div className="space-y-12">
+                        {educations.map((edu, idx) => (
+                            <div
+                                key={edu._id}
+                                className="relative pl-16 group"
+                                data-aos="fade-right"
+                                data-aos-delay={idx * 150}
+                            >
                                 {/* Dot */}
                                 <div
-                                    className="absolute left-0 top-1 w-10 h-10 rounded-full flex items-center justify-center border-2 z-10"
-                                    style={{
-                                        background: 'var(--c-bg)',
-                                        borderColor: 'var(--c-accent)',
-                                    }}
+                                    className="absolute left-0 top-1 w-12 h-12 rounded-2xl flex items-center justify-center border border-[var(--c-border)] z-10 bg-[var(--c-bg-alt)] shadow-xl transition-transform duration-300 group-hover:scale-110"
                                 >
                                     <FiBookOpen
-                                        className="text-sm"
-                                        style={{ color: 'var(--c-accent)' }}
+                                        className="text-lg text-[var(--c-accent)]"
                                     />
                                 </div>
 
-                                {/* Card - Matching Publications Style */}
+                                {/* Content */}
                                 <div
-                                    className="card p-6 rounded-2xl relative overflow-hidden transition-all duration-300 hover:-translate-y-1"
-                                    style={{ borderLeft: '4px solid var(--c-accent)' }}
+                                    className="relative transition-all duration-300"
                                 >
-
-                                    <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
-                                        <div>
-                                            <h3
-                                                className="text-xl font-bold mb-1"
-                                                style={{
-                                                    fontFamily: 'var(--font-heading)',
-                                                }}
-                                            >
-                                                {edu.degree}
-                                            </h3>
-
-                                            {edu.fieldOfStudy && (
-                                                <p
-                                                    className="font-semibold text-sm"
-                                                    style={{ color: 'var(--c-text)' }}
+                                    <div className="flex flex-col gap-4">
+                                        <div className="flex flex-wrap items-center justify-between gap-4">
+                                            <div>
+                                                <h3
+                                                    className="text-2xl font-bold tracking-tight text-[var(--c-text)] mb-1"
+                                                    style={{ fontFamily: 'var(--font-heading)' }}
                                                 >
-                                                    {edu.fieldOfStudy}
+                                                    {edu.degree}
+                                                </h3>
+                                                {edu.fieldOfStudy && (
+                                                    <p className="text-lg font-semibold text-[var(--c-accent)]">
+                                                        {edu.fieldOfStudy}
+                                                    </p>
+                                                )}
+                                                <p className="text-base text-[var(--c-text-secondary)] font-medium mt-1">
+                                                    {edu.institution}
                                                 </p>
-                                            )}
-
-                                            <p
-                                                className="text-sm font-medium mt-1"
-                                                style={{ color: 'var(--c-text-secondary)' }}
+                                            </div>
+                                            <time
+                                                className="tag bg-[var(--c-surface)] border-[var(--c-border)] text-[var(--c-text-muted)] font-mono py-1.5 px-3"
                                             >
-                                                {edu.institution}
-                                            </p>
+                                                {new Date(edu.startDate).getFullYear()} — {edu.current ? 'Present' : new Date(edu.endDate).getFullYear()}
+                                            </time>
                                         </div>
 
-                                        <time
-                                            className="text-xs font-mono py-1 px-2 rounded-full inline-block border"
-                                            style={{
-                                                background: 'var(--c-bg-alt)',
-                                                color: 'var(--c-text-secondary)',
-                                                borderColor: 'var(--c-border-light)'
-                                            }}
-                                        >
-                                            {new Date(edu.startDate).getFullYear()} — {edu.current ? 'Present' : new Date(edu.endDate).getFullYear()}
-                                        </time>
+                                        {edu.description && (
+                                            <p className="text-lg leading-relaxed text-[var(--c-text-secondary)]">
+                                                {edu.description}
+                                            </p>
+                                        )}
                                     </div>
-
-                                    {edu.description && (
-                                        <p
-                                            className="text-sm leading-relaxed"
-                                            style={{ color: 'var(--c-text-muted)' }}
-                                        >
-                                            {edu.description}
-                                        </p>
-                                    )}
                                 </div>
                             </div>
                         ))}

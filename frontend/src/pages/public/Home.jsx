@@ -18,35 +18,50 @@ const Home = () => {
     }, []);
 
     return (
-        <div className="space-y-0">
+        <div className="text-[var(--c-text)] font-sans selection:bg-[var(--c-accent)]/30">
             <Hero />
 
-            {/* Research & Technical Core */}
-            <div id="expertise" className="relative">
-                <Skills />
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 py-24">
+                {/* Research & Technical Core */}
+                <section id="expertise" className="panel" data-aos="fade-up">
+                    <Skills />
+                </section>
+
+                <section id="publications" className="panel" data-aos="fade-up">
+                    <PublicationsList />
+                </section>
+
+                {/* Experience & Education */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <section className="panel" data-aos="fade-right">
+                        <ExperienceTimeline />
+                    </section>
+                    <section className="panel" data-aos="fade-left">
+                        <EducationTimeline />
+                    </section>
+                </div>
+
+                {/* Work */}
+                <section className="panel" data-aos="fade-up">
+                    <FeaturedProjects />
+                </section>
+
+                <section className="panel" data-aos="fade-up">
+                    <CertificationsGrid />
+                </section>
+
+                <section className="panel" data-aos="fade-up">
+                    <AchievementsList />
+                </section>
+
+                <section className="panel" data-aos="fade-up">
+                    <TestimonialsCarousel />
+                </section>
+
+                <section className="panel" data-aos="fade-up">
+                    <ContactCTA />
+                </section>
             </div>
-
-            <div id="publications" className="relative">
-                <PublicationsList />
-            </div>
-
-            {/* Experience & Education */}
-            <div className="bg-grid-pattern">
-                <ExperienceTimeline />
-                <EducationTimeline />
-            </div>
-
-            {/* Work */}
-            <FeaturedProjects />
-
-            <CertificationsGrid />
-
-            <AchievementsList />
-
-            <TestimonialsCarousel />
-
-            <ContactCTA />
-
             <ResumeDownload />
         </div>
     );

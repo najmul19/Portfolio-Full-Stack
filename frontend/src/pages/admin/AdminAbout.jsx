@@ -130,6 +130,14 @@ const AdminAbout = () => {
                             <input name="social_linkedin" value={formData.social?.linkedin || ''} onChange={handleChange} className="w-full p-2 rounded bg-dark-bg border border-gray-600 text-white" />
                         </div>
                         <div>
+                            <label className="block text-gray-400 mb-1">YouTube</label>
+                            <input name="social_youtube" value={formData.social?.youtube || ''} onChange={handleChange} className="w-full p-2 rounded bg-dark-bg border border-gray-600 text-white" />
+                        </div>
+                        <div>
+                            <label className="block text-gray-400 mb-1">Facebook</label>
+                            <input name="social_facebook" value={formData.social?.facebook || ''} onChange={handleChange} className="w-full p-2 rounded bg-dark-bg border border-gray-600 text-white" />
+                        </div>
+                        <div>
                             <label className="block text-gray-400 mb-1">Twitter (X)</label>
                             <input name="social_twitter" value={formData.social?.twitter || ''} onChange={handleChange} className="w-full p-2 rounded bg-dark-bg border border-gray-600 text-white" />
                         </div>

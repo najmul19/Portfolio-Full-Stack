@@ -51,6 +51,7 @@ const aboutSchema = new mongoose.Schema(
             twitter: String,
             instagram: String,
             facebook: String,
+            youtube: String,
         },
     },
     {

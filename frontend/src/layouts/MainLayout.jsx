@@ -1,7 +1,7 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
-import { FaSun, FaMoon, FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
-import { useEffect, useState } from 'react';
+import { FaSun, FaMoon, FaGithub, FaLinkedin, FaEnvelope, FaFacebook, FaYoutube } from 'react-icons/fa';
+import { useEffect, useRef, useState } from 'react';
 
 const navLinks = [
     { path: '/', label: 'Home' },
@@ -9,48 +9,200 @@ const navLinks = [
     { path: '/contact', label: 'Contact' },
 ];
 
+/* ─────────────────────────────────────────
+   Full-page ambient particle background
+   Inspired by miner1033 network effect
+   ───────────────────────────────────────── */
+const GlobalParticles = ({ isDark }) => {
+    const canvasRef = useRef(null);
+    const isDarkRef = useRef(isDark);
+    useEffect(() => { isDarkRef.current = isDark; }, [isDark]);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        let animId;
+        const mouse = { x: -1000, y: -1000 };
+
+        const resize = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
+        resize();
+        window.addEventListener('resize', resize);
+
+        const handleMouseMove = (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        };
+        window.addEventListener('mousemove', handleMouseMove);
+
+        // Particle count based on screen size
+        const count = Math.min(Math.floor((window.innerWidth * window.innerHeight) / 15000), 120);
+        const particles = Array.from({ length: count }, () => ({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            r: Math.random() * 1.5 + 0.5,
+            vx: (Math.random() - 0.5) * 0.4,
+            vy: (Math.random() - 0.5) * 0.4,
+            opacity: Math.random() * 0.5 + 0.2,
+        }));
+
+        const draw = () => {
+            const dark = isDarkRef.current;
+            const accent = dark ? '#2b6cee' : '#0d9488';
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Particles
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0) p.x = canvas.width;
+                if (p.x > canvas.width) p.x = 0;
+                if (p.y < 0) p.y = canvas.height;
+                if (p.y > canvas.height) p.y = 0;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = `${accent}${Math.round(p.opacity * 255).toString(16).padStart(2, '0')}`;
+                ctx.fill();
+            });
+
+            // Lines between nearby particles (Constellation/Web effect)
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distSq = dx * dx + dy * dy;
+                    const maxDist = 150;
+
+                    if (distSq < maxDist * maxDist) {
+                        const dist = Math.sqrt(distSq);
+                        const alpha = (1 - (dist / maxDist)) * 0.15;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `${accent}${Math.round(alpha * 255).toString(16).padStart(2, '0')}`;
+                        ctx.lineWidth = 0.8;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            // Lines to mouse
+            particles.forEach(p => {
+                const dx = p.x - mouse.x;
+                const dy = p.y - mouse.y;
+                const distSq = dx * dx + dy * dy;
+                const maxDist = 200;
+
+                if (distSq < maxDist * maxDist) {
+                    const dist = Math.sqrt(distSq);
+                    const alpha = (1 - (dist / maxDist)) * 0.25;
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(mouse.x, mouse.y);
+                    ctx.strokeStyle = `${accent}${Math.round(alpha * 255).toString(16).padStart(2, '0')}`;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+            });
+
+            animId = requestAnimationFrame(draw);
+        };
+        draw();
+
+        return () => {
+            cancelAnimationFrame(animId);
+            window.removeEventListener('resize', resize);
+            window.removeEventListener('mousemove', handleMouseMove);
+        };
+    }, []);
+
+    return (
+        <canvas
+            ref={canvasRef}
+            aria-hidden="true"
+            style={{
+                position: 'fixed',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                pointerEvents: 'none',
+                zIndex: 1, // Above root background but below content
+                opacity: 0.8,
+                background: 'transparent',
+                transition: 'opacity 0.5s ease',
+            }}
+        />
+    );
+};
+
+/* ─────────────────────────────────────────
+   Main Layout
+   ───────────────────────────────────────── */
 const MainLayout = () => {
     const { theme, toggleTheme } = useTheme();
     const location = useLocation();
     const [scrolled, setScrolled] = useState(false);
+    const [about, setAbout] = useState(null);
+    const isDark = theme === 'dark';
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 20);
         window.addEventListener('scroll', onScroll, { passive: true });
+
+        // Fetch social links/about for footer
+        import('../services/aboutService').then(m => {
+            m.default.getAbout().then(res => setAbout(res.data)).catch(() => { });
+        });
+
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
     return (
         <div
-            className="min-h-screen flex flex-col"
-            style={{ background: 'var(--c-bg)', color: 'var(--c-text)' }}
+            style={{
+                minHeight: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                position: 'relative',
+                background: 'var(--c-bg)',
+                color: 'var(--c-text)',
+            }}
         >
-            {/* ── Navbar ── */}
+            {/* ── Full-page ambient particle canvas (fixed, z=0) ── */}
+            <GlobalParticles isDark={isDark} />
+
+            {/* ── Navbar (z=50) ── */}
             <nav
-                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'glass-strong shadow-lg' : ''
-                    }`}
-                style={{
-                    background: scrolled ? 'var(--c-glass-bg)' : 'transparent',
-                    backdropFilter: scrolled ? 'blur(24px)' : 'none',
-                    WebkitBackdropFilter: scrolled ? 'blur(24px)' : 'none',
-                    borderBottom: scrolled ? '1px solid var(--c-glass-border)' : 'none',
-                    boxShadow: scrolled ? 'var(--c-navbar-shadow)' : 'none',
-                }}
+                className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-4xl px-4 transition-all duration-500"
+                data-aos="fade-down"
+                data-aos-duration="1200"
             >
-                <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+                <div
+                    className={`flex items-center justify-between px-6 py-3 rounded-2xl border transition-all duration-500 ${scrolled
+                        ? 'backdrop-blur-xl shadow-2xl'
+                        : 'bg-transparent border-transparent'
+                        }`}
+                    style={scrolled ? {
+                        background: 'var(--c-glass-bg)',
+                        borderColor: 'var(--c-glass-border)',
+                        boxShadow: 'var(--c-navbar-shadow)',
+                    } : {}}
+                >
                     {/* Logo */}
                     <Link
                         to="/"
-                        className="text-xl font-bold tracking-tight"
-                        style={{ fontFamily: 'var(--font-heading)', color: 'var(--c-text)' }}
+                        className="text-2xl font-bold tracking-tighter"
+                        style={{ fontFamily: 'var(--font-heading)' }}
                     >
                         <span className="animated-gradient-text">MNI</span>
-                        <span className="ml-1 font-normal" style={{ color: 'var(--c-text-secondary)' }}>
-                            .dev
-                        </span>
                     </Link>
 
-                    {/* Nav Links + Theme Toggle */}
+                    {/* Links + toggle */}
                     <div className="flex items-center gap-1">
                         {navLinks.map(link => {
                             const isActive = location.pathname === link.path;
@@ -58,95 +210,68 @@ const MainLayout = () => {
                                 <Link
                                     key={link.path}
                                     to={link.path}
-                                    className="relative px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200"
-                                    style={{
-                                        color: isActive ? 'var(--c-accent)' : 'var(--c-text-secondary)',
-                                    }}
-                                    onMouseEnter={e => {
-                                        if (!isActive) e.target.style.color = 'var(--c-text)';
-                                    }}
-                                    onMouseLeave={e => {
-                                        if (!isActive) e.target.style.color = 'var(--c-text-secondary)';
-                                    }}
+                                    className={`relative px-4 py-2 text-sm font-semibold rounded-xl transition-all duration-300 ${isActive
+                                        ? 'text-[var(--c-accent)] bg-[var(--c-accent-subtle)]'
+                                        : 'text-[var(--c-text-secondary)] hover:text-[var(--c-text)] hover:bg-[var(--c-surface-hover)]'
+                                        }`}
                                 >
                                     {link.label}
-                                    {isActive && (
-                                        <span
-                                            className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-6 rounded-full"
-                                            style={{ background: 'var(--c-accent)' }}
-                                        />
-                                    )}
                                 </Link>
                             );
                         })}
 
-                        {/* Divider */}
-                        <span
-                            className="mx-2 h-5 w-px"
-                            style={{ background: 'var(--c-border)' }}
-                        />
+                        <span className="mx-2 h-4 w-px bg-[var(--c-border)]" />
 
-                        {/* Theme Toggle */}
                         <button
                             onClick={toggleTheme}
-                            className="p-2 rounded-lg transition-colors duration-200"
-                            style={{ color: 'var(--c-text-muted)' }}
-                            onMouseEnter={e => (e.currentTarget.style.color = 'var(--c-accent)')}
-                            onMouseLeave={e => (e.currentTarget.style.color = 'var(--c-text-muted)')}
+                            className="p-2.5 rounded-xl transition-all duration-300 text-[var(--c-text-muted)] hover:text-[var(--c-accent)] hover:bg-[var(--c-surface-hover)]"
                             aria-label="Toggle theme"
-                            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
                         >
-                            {theme === 'dark' ? <FaSun className="text-lg" /> : <FaMoon className="text-lg" />}
+                            {isDark ? <FaSun className="text-lg" /> : <FaMoon className="text-lg" />}
                         </button>
                     </div>
                 </div>
             </nav>
 
-            {/* ── Main Content ── */}
-            <main className="flex-1 pt-20">
+            {/* ── Main content (z=10 so it sits above particles) ── */}
+            <main className="flex-1" style={{ position: 'relative', zIndex: 10 }}>
                 <Outlet />
             </main>
 
             {/* ── Footer ── */}
             <footer
-                className="mt-auto border-t"
-                style={{
-                    background: 'var(--c-bg-alt)',
-                    borderColor: 'var(--c-border)',
-                }}
+                className="border-t border-[var(--c-border)] py-20"
+                style={{ position: 'relative', zIndex: 10, background: 'var(--c-bg)' }}
+                data-aos="fade-up"
+                data-aos-offset="0"
             >
-                <div className="max-w-6xl mx-auto px-6 py-12">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
                         {/* Brand */}
-                        <div>
+                        <div className="md:col-span-6">
                             <h3
-                                className="text-lg font-bold mb-3"
+                                className="text-2xl font-bold mb-4 tracking-tight"
                                 style={{ fontFamily: 'var(--font-heading)' }}
                             >
-                                <span className="gradient-text">MD Najmul Islam</span>
+                                <span className="animated-gradient-text">MD Najmul Islam</span>
                             </h3>
-                            <p className="text-sm leading-relaxed" style={{ color: 'var(--c-text-muted)' }}>
-                                AI/ML Researcher · AI Automation Engineer · Full Stack Engineer
+                            <p className="text-lg text-[var(--c-text-secondary)] max-w-md leading-relaxed">
+                                Building the future of AI through research and engineering.
+                                Focused on deep learning, automation, and full-stack excellence.
                             </p>
                         </div>
 
                         {/* Quick Links */}
-                        <div>
-                            <h4
-                                className="text-sm font-semibold mb-3 uppercase tracking-wider"
-                                style={{ color: 'var(--c-text-muted)' }}
-                            >
-                                Quick Links
+                        <div className="md:col-span-3">
+                            <h4 className="text-xs font-bold mb-6 uppercase tracking-[0.2em] text-[var(--c-text-muted)]">
+                                Navigate
                             </h4>
-                            <div className="flex flex-col gap-2">
+                            <div className="flex flex-col gap-3">
                                 {navLinks.map(link => (
                                     <Link
                                         key={link.path}
                                         to={link.path}
-                                        className="text-sm transition-colors"
-                                        style={{ color: 'var(--c-text-secondary)' }}
-                                        onMouseEnter={e => (e.target.style.color = 'var(--c-accent)')}
-                                        onMouseLeave={e => (e.target.style.color = 'var(--c-text-secondary)')}
+                                        className="text-base text-[var(--c-text-secondary)] hover:text-[var(--c-accent)] transition-colors"
                                     >
                                         {link.label}
                                     </Link>
@@ -155,34 +280,40 @@ const MainLayout = () => {
                         </div>
 
                         {/* Social */}
-                        <div>
-                            <h4
-                                className="text-sm font-semibold mb-3 uppercase tracking-wider"
-                                style={{ color: 'var(--c-text-muted)' }}
-                            >
-                                Connect
+                        <div className="md:col-span-3">
+                            <h4 className="text-xs font-bold mb-6 uppercase tracking-[0.2em] text-[var(--c-text-muted)]">
+                                Presence
                             </h4>
                             <div className="flex gap-4">
                                 {[
-                                    { icon: FaGithub, href: 'https://github.com/najmul19', label: 'GitHub' },
-                                    { icon: FaLinkedin, href: 'https://linkedin.com/in/najmul19', label: 'LinkedIn' },
-                                    { icon: FaEnvelope, href: 'mailto:inajmul605@gmail.com', label: 'Email' },
+                                    { icon: FaGithub, href: about?.social?.github || 'https://github.com/najmul19', label: 'GitHub' },
+                                    { icon: FaLinkedin, href: about?.social?.linkedin || 'https://linkedin.com/in/najmul19', label: 'LinkedIn' },
+                                    { icon: FaFacebook, href: about?.social?.facebook || about?.social?.instagram || '#', label: 'Facebook' },
+                                    { icon: FaYoutube, href: about?.social?.youtube || about?.social?.twitter || '#', label: 'YouTube' },
+                                    { icon: FaEnvelope, href: `mailto:${about?.email || 'inajmul605@gmail.com'}`, label: 'Email' },
                                 ].map(({ icon: Icon, href, label }) => (
                                     <a
                                         key={label}
                                         href={href}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-lg p-2 rounded-lg transition-colors"
+                                        className="w-12 h-12 flex items-center justify-center rounded-2xl border transition-all duration-300 hover:scale-110"
                                         style={{
+                                            background: 'var(--c-glass-bg)',
+                                            borderColor: 'var(--c-border)',
                                             color: 'var(--c-text-muted)',
-                                            background: 'var(--c-accent-subtle)',
                                         }}
-                                        onMouseEnter={e => (e.currentTarget.style.color = 'var(--c-accent)')}
-                                        onMouseLeave={e => (e.currentTarget.style.color = 'var(--c-text-muted)')}
+                                        onMouseEnter={e => {
+                                            e.currentTarget.style.color = 'var(--c-accent)';
+                                            e.currentTarget.style.borderColor = 'var(--c-accent)';
+                                        }}
+                                        onMouseLeave={e => {
+                                            e.currentTarget.style.color = 'var(--c-text-muted)';
+                                            e.currentTarget.style.borderColor = 'var(--c-border)';
+                                        }}
                                         aria-label={label}
                                     >
-                                        <Icon />
+                                        <Icon className="text-xl" />
                                     </a>
                                 ))}
                             </div>
@@ -190,14 +321,12 @@ const MainLayout = () => {
                     </div>
 
                     {/* Copyright */}
-                    <div
-                        className="mt-10 pt-6 border-t text-center text-sm"
-                        style={{
-                            borderColor: 'var(--c-border)',
-                            color: 'var(--c-text-muted)',
-                        }}
-                    >
-                        © {new Date().getFullYear()} MD Najmul Islam. All rights reserved.
+                    <div className="mt-20 pt-8 border-t border-[var(--c-border)] flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-[var(--c-text-muted)]">
+                        <p>© {new Date().getFullYear()} MD Najmul Islam. All rights reserved.</p>
+                        <div className="flex gap-8">
+                            <span className="hover:text-[var(--c-accent)] transition-colors cursor-pointer">Privacy Policy</span>
+                            <span className="hover:text-[var(--c-accent)] transition-colors cursor-pointer">Terms of Service</span>
+                        </div>
                     </div>
                 </div>
             </footer>

@@ -21,107 +21,82 @@ const ExperienceTimeline = () => {
     if (experiences.length === 0) return null;
 
     return (
-        <section className="py-20 px-6" style={{ background: 'var(--c-bg-alt)' }}>
-            <div className="max-w-4xl mx-auto">
-                {/* Heading */}
-                <h2 className="section-heading mb-10">Work Experience</h2>
+        <section className="">
+            <div className="">
+                <h2 className="section-heading mb-12">Work Experience</h2>
 
-                {/* Timeline */}
                 <div className="relative">
-                    {/* Vertical line */}
+                    {/* Vertical line - Subtle gradient */}
                     <div
-                        className="absolute top-0 bottom-0 left-[19px] w-px"
-                        style={{ background: 'var(--c-border)' }}
+                        className="absolute top-0 bottom-0 left-[23px] w-0.5 bg-gradient-to-b from-[var(--c-accent)] to-transparent opacity-20"
                     />
 
-                    <div className="space-y-8">
-                        {experiences.map((exp) => (
-                            <div key={exp._id} className="relative pl-12 group">
+                    <div className="space-y-12">
+                        {experiences.map((exp, idx) => (
+                            <div
+                                key={exp._id}
+                                className="relative pl-16 group"
+                                data-aos="fade-left"
+                                data-aos-delay={idx * 150}
+                            >
                                 {/* Timeline dot */}
                                 <div
-                                    className="absolute left-0 top-1 w-10 h-10 rounded-full flex items-center justify-center border-2 z-10"
-                                    style={{
-                                        background: 'var(--c-bg)',
-                                        borderColor: 'var(--c-accent)',
-                                    }}
+                                    className="absolute left-0 top-1 w-12 h-12 rounded-2xl flex items-center justify-center border border-[var(--c-border)] z-10 bg-[var(--c-bg-alt)] shadow-xl transition-transform duration-300 group-hover:scale-110"
                                 >
                                     <FiBriefcase
-                                        className="text-sm"
-                                        style={{ color: 'var(--c-accent)' }}
+                                        className="text-lg text-[var(--c-accent)]"
                                     />
                                 </div>
 
-                                {/* Card - Matching Publications Style */}
+                                {/* Content */}
                                 <div
-                                    className="card p-6 rounded-2xl relative overflow-hidden transition-all duration-300 hover:-translate-y-1"
-                                    style={{ borderLeft: '4px solid var(--c-accent)' }}
+                                    className="relative transition-all duration-300"
                                 >
-
-                                    <div className="flex flex-wrap items-start justify-between gap-2 mb-4">
-                                        <div>
-                                            <h3
-                                                className="text-xl font-bold mb-1"
-                                                style={{
-                                                    fontFamily: 'var(--font-heading)',
-                                                }}
-                                            >
-                                                {exp.position}
-                                            </h3>
-                                            <p
-                                                className="text-sm font-semibold"
-                                                style={{ color: 'var(--c-text)' }}
-                                            >
-                                                {exp.company}
-                                            </p>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <time
-                                                className="text-xs font-mono py-1 px-2 rounded-full inline-block border"
-                                                style={{
-                                                    background: 'var(--c-bg-alt)',
-                                                    color: 'var(--c-text-secondary)',
-                                                    borderColor: 'var(--c-border-light)'
-                                                }}
-                                            >
-                                                {new Date(exp.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-                                                {' — '}
-                                                {exp.current
-                                                    ? 'Present'
-                                                    : new Date(exp.endDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-                                            </time>
-                                            {exp.current && (
-                                                <span
-                                                    className="text-xs font-bold px-2 py-0.5 rounded-full"
-                                                    style={{
-                                                        background: 'rgba(34,197,94,0.1)',
-                                                        color: 'var(--c-success)',
-                                                    }}
+                                    <div className="flex flex-col gap-4">
+                                        <div className="flex flex-wrap items-center justify-between gap-4">
+                                            <div>
+                                                <h3
+                                                    className="text-2xl font-bold tracking-tight text-[var(--c-text)] mb-1"
+                                                    style={{ fontFamily: 'var(--font-heading)' }}
                                                 >
-                                                    Current
-                                                </span>
-                                            )}
+                                                    {exp.position}
+                                                </h3>
+                                                <p className="text-lg font-semibold text-[var(--c-accent)]">
+                                                    {exp.company}
+                                                </p>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                                <time
+                                                    className="tag bg-[var(--c-surface)] border-[var(--c-border)] text-[var(--c-text-muted)] font-mono py-1.5 px-3"
+                                                >
+                                                    {new Date(exp.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                                                    {' — '}
+                                                    {exp.current
+                                                        ? 'Present'
+                                                        : new Date(exp.endDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                                                </time>
+                                                {exp.current && (
+                                                    <span className="tag bg-[var(--c-success)]/10 text-[var(--c-success)] border-[var(--c-success)]/20 font-bold">
+                                                        Current
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
+
+                                        <p className="text-lg leading-relaxed text-[var(--c-text-secondary)]">
+                                            {exp.description}
+                                        </p>
+
+                                        {exp.technologies && exp.technologies.length > 0 && (
+                                            <div className="flex flex-wrap gap-3 mt-2">
+                                                {exp.technologies.map((tech, i) => (
+                                                    <span key={i} className="tag text-xs">
+                                                        {tech}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
-
-                                    <p
-                                        className="text-sm leading-relaxed mb-4"
-                                        style={{ color: 'var(--c-text-muted)' }}
-                                    >
-                                        {exp.description}
-                                    </p>
-
-                                    {exp.technologies && exp.technologies.length > 0 && (
-                                        <div className="flex flex-wrap gap-2">
-                                            {exp.technologies.map((tech, i) => (
-                                                <span
-                                                    key={i}
-                                                    className="tag"
-                                                >
-                                                    {tech}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    )}
                                 </div>
                             </div>
                         ))}

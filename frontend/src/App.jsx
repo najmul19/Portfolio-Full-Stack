@@ -1,59 +1,78 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
+// Layouts
 import MainLayout from './layouts/MainLayout';
+import AdminLayout from './layouts/AdminLayout';
+
+// Public Pages
 import Home from './pages/public/Home';
 import Projects from './pages/public/Projects';
 import Contact from './pages/public/Contact';
+
+// Admin Pages
 import Login from './pages/admin/Login';
 import Dashboard from './pages/admin/Dashboard';
-import AdminLayout from './layouts/AdminLayout';
-import ProtectedRoute from './components/admin/ProtectedRoute';
-import AdminProjectList from './pages/admin/AdminProjectList';
+import AdminAbout from './pages/admin/AdminAbout';
 import AdminSkillList from './pages/admin/AdminSkillList';
 import AdminExperienceList from './pages/admin/AdminExperienceList';
-import AdminMessageList from './pages/admin/AdminMessageList';
-import AdminCertificationList from './pages/admin/AdminCertificationList';
 import AdminEducationList from './pages/admin/AdminEducationList';
+import AdminProjectList from './pages/admin/AdminProjectList';
+import AdminCertificationList from './pages/admin/AdminCertificationList';
+import AdminPublicationList from './pages/admin/AdminPublicationList';
 import AdminAchievementList from './pages/admin/AdminAchievementList';
 import AdminTestimonialList from './pages/admin/AdminTestimonialList';
-import AdminPublicationList from './pages/admin/AdminPublicationList';
-import AdminResumeList from './pages/admin/AdminResumeList';
-import AdminAbout from './pages/admin/AdminAbout';
+import AdminMessageList from './pages/admin/AdminMessageList';
+import ProtectedRoute from './components/admin/ProtectedRoute';
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<Home />} />
-          <Route path="projects" element={<Projects />} />
-          <Route path="experience" element={<div className="text-2xl">Experience Page</div>} />
-          <Route path="education" element={<div className="text-2xl">Education Page</div>} />
-          <Route path="publications" element={<div className="text-2xl">Publications Page</div>} />
-          <Route path="contact" element={<Contact />} />
-        </Route>
+    useEffect(() => {
+        AOS.init({
+            duration: 1000,
+            once: true,
+            easing: 'ease-in-out',
+            offset: 100,
+        });
+    }, []);
 
-        <Route path="/login" element={<Login />} />
+    return (
+        <Router>
+            <Routes>
+                {/* Public Routes */}
+                <Route path="/" element={<MainLayout />}>
+                    <Route index element={<Home />} />
+                    <Route path="projects" element={<Projects />} />
+                    <Route path="contact" element={<Contact />} />
+                </Route>
 
-        {/* Admin Routes */}
-        <Route path="/admin" element={<ProtectedRoute />}>
-          <Route element={<AdminLayout />}>
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="projects" element={<AdminProjectList />} />
-            <Route path="skills" element={<AdminSkillList />} />
-            <Route path="experience" element={<AdminExperienceList />} />
-            <Route path="messages" element={<AdminMessageList />} />
-            <Route path="education" element={<AdminEducationList />} />
-            <Route path="certificates" element={<AdminCertificationList />} />
-            <Route path="achievements" element={<AdminAchievementList />} />
-            <Route path="testimonials" element={<AdminTestimonialList />} />
-            <Route path="publications" element={<AdminPublicationList />} />
-            <Route path="resume" element={<AdminResumeList />} />
-            <Route path="about" element={<AdminAbout />} />
-          </Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  );
+                {/* Admin Auth */}
+                <Route path="/login" element={<Login />} />
+                <Route path="/admin/login" element={<Navigate to="/login" replace />} />
+
+                {/* Protected Admin Routes */}
+                <Route element={<ProtectedRoute />}>
+                    <Route path="/admin" element={<AdminLayout />}>
+                        <Route index element={<Dashboard />} />
+                        <Route path="about" element={<AdminAbout />} />
+                        <Route path="skills" element={<AdminSkillList />} />
+                        <Route path="experience" element={<AdminExperienceList />} />
+                        <Route path="education" element={<AdminEducationList />} />
+                        <Route path="projects" element={<AdminProjectList />} />
+                        <Route path="certifications" element={<AdminCertificationList />} />
+                        <Route path="publications" element={<AdminPublicationList />} />
+                        <Route path="achievements" element={<AdminAchievementList />} />
+                        <Route path="testimonials" element={<AdminTestimonialList />} />
+                        <Route path="messages" element={<AdminMessageList />} />
+                    </Route>
+                </Route>
+
+                {/* 404 Redirect */}
+                <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;
