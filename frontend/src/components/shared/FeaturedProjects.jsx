@@ -23,9 +23,9 @@ const FeaturedProjects = () => {
     return (
         <section className="">
             <div className="">
-                <div className="mb-16">
+                <div className="mb-12 text-center md:text-left">
                     <h2 className="section-heading">Featured Projects</h2>
-                    <p className="mt-2 text-[var(--c-text-secondary)] text-lg max-w-2xl">
+                    <p className="mt-4 text-[var(--c-text-secondary)] text-base md:text-lg max-w-2xl mx-auto md:mx-0">
                         Selected works demonstrating technical expertise in AI, Machine Learning, and Full Stack Development
                     </p>
                 </div>
@@ -73,7 +73,7 @@ const FeaturedProjects = () => {
                                 </div>
                             </div>
 
-                            <div className="p-8 flex-1 flex flex-col">
+                            <div className="p-6 md:p-8 flex-1 flex flex-col">
                                 <h3
                                     className="text-2xl font-bold mb-4"
                                     style={{ fontFamily: 'var(--font-heading)' }}
@@ -98,8 +98,8 @@ const FeaturedProjects = () => {
                     ))}
                 </div>
 
-                <div className="mt-16">
-                    <a href="/projects" className="btn-outline px-8 py-3.5">
+                <div className="mt-12 text-center md:text-left">
+                    <a href="/projects" className="btn-outline px-8 py-3.5 w-full md:w-auto text-center justify-center">
                         View All Projects
                     </a>
                 </div>

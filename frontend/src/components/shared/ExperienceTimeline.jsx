@@ -35,7 +35,7 @@ const ExperienceTimeline = () => {
                         {experiences.map((exp, idx) => (
                             <div
                                 key={exp._id}
-                                className="relative pl-16 group"
+                                className="relative pl-12 md:pl-16 group"
                                 data-aos="fade-left"
                                 data-aos-delay={idx * 150}
                             >
@@ -53,7 +53,7 @@ const ExperienceTimeline = () => {
                                     className="relative transition-all duration-300"
                                 >
                                     <div className="flex flex-col gap-4">
-                                        <div className="flex flex-wrap items-center justify-between gap-4">
+                                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                                             <div>
                                                 <h3
                                                     className="text-2xl font-bold tracking-tight text-[var(--c-text)] mb-1"

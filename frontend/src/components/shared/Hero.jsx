@@ -162,11 +162,11 @@ const Hero = () => {
             />
 
             {/* Content */}
-            <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-32">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-32">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
 
                     {/* ── LEFT ── */}
-                    <div className="space-y-7">
+                    <div className="space-y-7 text-center lg:text-left">
 
                         {/* Available badge */}
                         <div
@@ -254,11 +254,11 @@ const Hero = () => {
                             )}
                         </p>
 
-                        {/* CTA Buttons */}
                         <div
                             data-aos="fade-up"
                             data-aos-delay="400"
-                            style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', paddingTop: '0.25rem' }}
+                            style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', paddingTop: '0.25rem', justifyContent: 'center', lg: { justifyContent: 'flex-start' } }}
+                            className="justify-center lg:justify-start"
                         >
                             <a
                                 href="/projects"
@@ -325,7 +325,7 @@ const Hero = () => {
                             }}>
                                 Connect
                             </span>
-                            <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }} className="justify-center lg:justify-start">
                                 {[
                                     { icon: FaLinkedin, href: about?.social?.linkedin || 'https://linkedin.com/in/najmul19', label: 'LinkedIn' },
                                     { icon: FaGithub, href: about?.social?.github || 'https://github.com/najmul19', label: 'GitHub' },
@@ -368,7 +368,9 @@ const Hero = () => {
                                 display: 'flex', flexWrap: 'wrap', alignItems: 'center',
                                 gap: '0.75rem 1rem', paddingTop: '1.5rem',
                                 borderTop: `1px solid ${tokens.divider}`,
+                                justifyContent: 'center'
                             }}
+                            className="justify-center lg:justify-start"
                         >
                             <span style={{
                                 fontSize: '0.625rem', fontWeight: 900,
@@ -388,12 +390,11 @@ const Hero = () => {
                         </div>
                     </div>
 
-                    {/* ── RIGHT: Avatar ── */}
-                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <div className="flex justify-center lg:justify-end order-first lg:order-last">
                         <div
                             data-aos="zoom-in"
                             data-aos-delay="400"
-                            style={{ position: 'relative', width: 380, height: 380 }}
+                            className="relative w-[280px] h-[280px] md:w-[380px] md:h-[380px]"
                         >
 
                             {/* Concentric rings */}

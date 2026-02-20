@@ -38,17 +38,17 @@ const Contact = () => {
     return (
         <section className="py-32 px-6">
             <div className="max-w-4xl mx-auto">
-                <div className="mb-16" data-aos="fade-down">
-                    <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tighter" style={{ fontFamily: 'var(--font-heading)' }}>
+                <div className="mb-12 md:mb-16 text-center md:text-left" data-aos="fade-down">
+                    <h1 className="text-4xl md:text-7xl font-bold mb-6 tracking-tighter" style={{ fontFamily: 'var(--font-heading)' }}>
                         Get In <span className="animated-gradient-text">Touch</span>
                     </h1>
-                    <p className="text-xl text-[var(--c-text-secondary)] leading-relaxed max-w-2xl">
+                    <p className="text-lg md:text-xl text-[var(--c-text-secondary)] leading-relaxed max-w-2xl mx-auto md:mx-0">
                         Have a question or want to work together? Fill out the form below.
                     </p>
                 </div>
 
                 <div
-                    className="panel p-8 md:p-12 shadow-2xl border border-[var(--c-border)] bg-[var(--c-bg-alt)]"
+                    className="panel p-6 md:p-12 shadow-2xl border border-[var(--c-border)] bg-[var(--c-bg-alt)]"
                     data-aos="zoom-in"
                     data-aos-duration="800"
                 >

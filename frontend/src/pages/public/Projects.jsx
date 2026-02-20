@@ -34,18 +34,18 @@ const Projects = () => {
     return (
         <section className="py-32 px-6 min-h-screen">
             <div className="max-w-7xl mx-auto">
-                <div className="mb-20" data-aos="fade-down">
-                    <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tighter" style={{ fontFamily: 'var(--font-heading)' }}>
+                <div className="mb-12 md:mb-20 text-center md:text-left" data-aos="fade-down">
+                    <h1 className="text-4xl md:text-7xl font-bold mb-6 tracking-tighter" style={{ fontFamily: 'var(--font-heading)' }}>
                         Portfolio <span className="animated-gradient-text">Projects</span>
                     </h1>
-                    <p className="max-w-2xl text-xl text-[var(--c-text-secondary)] leading-relaxed">
+                    <p className="max-w-2xl text-lg md:text-xl text-[var(--c-text-secondary)] leading-relaxed mx-auto md:mx-0">
                         A collection of research implementations, AI automation tools, and full-stack applications.
                     </p>
                 </div>
 
                 {/* Search & Filter */}
                 <div
-                    className="mb-16 flex flex-col lg:flex-row gap-8 justify-between items-center p-8 rounded-[24px] bg-[var(--c-bg-alt)] border border-[var(--c-border)] shadow-2xl"
+                    className="mb-12 md:mb-16 flex flex-col lg:flex-row gap-6 lg:gap-8 justify-between items-center p-6 md:p-8 rounded-[24px] bg-[var(--c-bg-alt)] border border-[var(--c-border)] shadow-2xl"
                     data-aos="fade-up"
                 >
                     {/* Search */}

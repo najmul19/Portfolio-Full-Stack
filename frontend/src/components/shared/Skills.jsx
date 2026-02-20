@@ -28,7 +28,7 @@ const Skills = () => {
                         Technical Expertise
                     </h2>
                     <p
-                        className="mt-4 text-sm max-w-xl mx-auto"
+                        className="mt-4 text-sm max-w-xl mx-auto px-4 md:px-0"
                         style={{ color: 'var(--c-text-muted)' }}
                     >
                         Core competencies across Machine Learning, AI Automation, and Full Stack Engineering
@@ -39,7 +39,7 @@ const Skills = () => {
                     {categories.map(category => (
                         <div
                             key={category}
-                            className="group card p-8 h-full"
+                            className="group card p-6 md:p-8 h-full"
                             data-aos="fade-up"
                         >
                             {/* Heading */}

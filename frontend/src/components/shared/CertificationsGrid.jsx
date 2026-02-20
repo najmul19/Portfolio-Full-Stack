@@ -22,13 +22,13 @@ const CertificationsGrid = () => {
     return (
         <section className="">
             <div className="">
-                <h2 className="section-heading mb-12">Certifications</h2>
+                <h2 className="section-heading mb-10 text-center md:text-left">Certifications</h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {certificates.map((cert, idx) => (
                         <div
                             key={cert._id}
-                            className="card p-8 group flex flex-col h-full hover:border-[var(--c-accent)]/20 transition-all duration-300 relative"
+                            className="card p-6 md:p-8 group flex flex-col h-full hover:border-[var(--c-accent)]/20 transition-all duration-300 relative"
                             data-aos="zoom-in"
                             data-aos-delay={idx * 100}
                         >

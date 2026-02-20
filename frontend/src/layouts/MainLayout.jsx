@@ -1,6 +1,7 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { FaSun, FaMoon, FaGithub, FaLinkedin, FaEnvelope, FaFacebook, FaYoutube } from 'react-icons/fa';
+import { FiMenu, FiX } from 'react-icons/fi';
 import { useEffect, useRef, useState } from 'react';
 
 const navLinks = [
@@ -148,6 +149,7 @@ const MainLayout = () => {
     const location = useLocation();
     const [scrolled, setScrolled] = useState(false);
     const [about, setAbout] = useState(null);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const isDark = theme === 'dark';
 
     useEffect(() => {
@@ -176,18 +178,18 @@ const MainLayout = () => {
             {/* ── Full-page ambient particle canvas (fixed, z=0) ── */}
             <GlobalParticles isDark={isDark} />
 
-            {/* ── Navbar (z=50) ── */}
+            {/* ── Navbar (z=100) ── */}
             <nav
-                className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-4xl px-4 transition-all duration-500"
+                className={`fixed top-0 md:top-6 left-0 md:left-1/2 md:-translate-x-1/2 z-[100] w-full md:max-w-4xl px-0 md:px-4 transition-all duration-500`}
                 data-aos="fade-down"
                 data-aos-duration="1200"
             >
                 <div
-                    className={`flex items-center justify-between px-6 py-3 rounded-2xl border transition-all duration-500 ${scrolled
+                    className={`flex items-center justify-between px-6 py-4 md:py-3 md:rounded-2xl border-b md:border transition-all duration-500 ${scrolled || mobileMenuOpen
                         ? 'backdrop-blur-xl shadow-2xl'
                         : 'bg-transparent border-transparent'
                         }`}
-                    style={scrolled ? {
+                    style={(scrolled || mobileMenuOpen) ? {
                         background: 'var(--c-glass-bg)',
                         borderColor: 'var(--c-glass-border)',
                         boxShadow: 'var(--c-navbar-shadow)',
@@ -196,14 +198,15 @@ const MainLayout = () => {
                     {/* Logo */}
                     <Link
                         to="/"
-                        className="text-2xl font-bold tracking-tighter"
+                        className="text-xl md:text-2xl font-bold tracking-tighter"
                         style={{ fontFamily: 'var(--font-heading)' }}
+                        onClick={() => setMobileMenuOpen(false)}
                     >
                         <span className="animated-gradient-text">MNI</span>
                     </Link>
 
-                    {/* Links + toggle */}
-                    <div className="flex items-center gap-1">
+                    {/* Desktop Links + toggle */}
+                    <div className="hidden md:flex items-center gap-1">
                         {navLinks.map(link => {
                             const isActive = location.pathname === link.path;
                             return (
@@ -229,6 +232,53 @@ const MainLayout = () => {
                         >
                             {isDark ? <FaSun className="text-lg" /> : <FaMoon className="text-lg" />}
                         </button>
+                    </div>
+
+                    {/* Mobile Toggle Buttons */}
+                    <div className="flex md:hidden items-center gap-2">
+                        <button
+                            onClick={toggleTheme}
+                            className="p-2 rounded-lg text-[var(--c-text-muted)]"
+                            aria-label="Toggle theme"
+                        >
+                            {isDark ? <FaSun className="text-xl" /> : <FaMoon className="text-xl" />}
+                        </button>
+                        <button
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            className="p-2 rounded-lg text-[var(--c-text)]"
+                            aria-label="Toggle menu"
+                        >
+                            {mobileMenuOpen ? <FiX className="text-2xl" /> : <FiMenu className="text-2xl" />}
+                        </button>
+                    </div>
+                </div>
+
+                {/* Mobile Menu Panel */}
+                <div
+                    className={`md:hidden absolute top-full left-0 w-full overflow-hidden transition-all duration-500 ease-in-out ${mobileMenuOpen ? 'max-h-[300px] opacity-100 border-b shadow-2xl' : 'max-h-0 opacity-0 pointer-events-none'}`}
+                    style={{
+                        background: 'var(--c-glass-bg)',
+                        borderColor: 'var(--c-glass-border)',
+                        backdropFilter: 'blur(20px)',
+                    }}
+                >
+                    <div className="flex flex-col p-6 gap-2">
+                        {navLinks.map(link => {
+                            const isActive = location.pathname === link.path;
+                            return (
+                                <Link
+                                    key={link.path}
+                                    to={link.path}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className={`px-4 py-4 text-base font-bold rounded-xl transition-all duration-300 ${isActive
+                                        ? 'text-[var(--c-accent)] bg-[var(--c-accent-subtle)]'
+                                        : 'text-[var(--c-text-secondary)] hover:text-[var(--c-text)]'
+                                        }`}
+                                >
+                                    {link.label}
+                                </Link>
+                            );
+                        })}
                     </div>
                 </div>
             </nav>
