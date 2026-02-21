@@ -174,6 +174,7 @@ const MainLayout = () => {
                 position: 'relative',
                 background: 'var(--c-bg)',
                 color: 'var(--c-text)',
+                overflowX: 'hidden',
             }}
         >
             {/* ── Full-page ambient particle canvas (fixed, z=0) ── */}
