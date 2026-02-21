@@ -5,6 +5,8 @@ import { FaTrophy, FaMedal, FaStar } from 'react-icons/fa';
 const AchievementsList = () => {
     const [achievements, setAchievements] = useState([]);
 
+    const [showAll, setShowAll] = useState(false);
+
     useEffect(() => {
         const fetchAchievements = async () => {
             try {
@@ -18,6 +20,8 @@ const AchievementsList = () => {
     }, []);
 
     if (achievements.length === 0) return null;
+
+    const displayedAchievements = showAll ? achievements : achievements.slice(0, 3);
 
     // Helper to render icon
     const renderIcon = (iconStr) => {
@@ -44,7 +48,7 @@ const AchievementsList = () => {
                 </div>
 
                 <div className="space-y-8">
-                    {achievements.map((item, index) => (
+                    {displayedAchievements.map((item, index) => (
                         <div
                             key={item._id}
                             className="card p-6 md:p-8 flex flex-col sm:flex-row gap-6 md:gap-8 items-start hover:border-[var(--c-accent)]/10 transition-all duration-300"
@@ -76,6 +80,17 @@ const AchievementsList = () => {
                         </div>
                     ))}
                 </div>
+
+                {achievements.length > 3 && (
+                    <div className="mt-12 flex justify-center">
+                        <button
+                            onClick={() => setShowAll(!showAll)}
+                            className="btn px-8 py-3 rounded-full border border-[var(--c-border)] hover:border-[var(--c-accent)] transition-all duration-300 bg-[var(--c-surface)] text-[var(--c-text)] font-semibold flex items-center gap-2 group shadow-lg hover:shadow-[var(--c-accent)]/20 shadow-transparent"
+                        >
+                            {showAll ? 'See Less' : `See More (${achievements.length - 3} more)`}
+                        </button>
+                    </div>
+                )}
             </div>
         </section>
     );

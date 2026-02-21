@@ -141,7 +141,7 @@ const Hero = () => {
 
     const techStack = about?.techStack?.length
         ? about.techStack
-        : ['PyTorch', 'TensorFlow', 'React', 'Docker', 'FastAPI'];
+        : ['React', 'Node.js', 'Express.js', 'MongoDB', 'PyTorch', 'TensorFlow', 'SQL', 'FastAPI'];
 
     return (
         <section
