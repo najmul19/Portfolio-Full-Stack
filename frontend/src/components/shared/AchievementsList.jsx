@@ -43,35 +43,36 @@ const AchievementsList = () => {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="space-y-8">
                     {achievements.map((item, index) => (
                         <div
                             key={item._id}
-                            className="card p-10 group flex flex-col h-full hover:border-white/10 transition-all duration-300 relative"
+                            className="card p-6 md:p-8 flex flex-col sm:flex-row gap-6 md:gap-8 items-start hover:border-[var(--c-accent)]/10 transition-all duration-300"
                             data-aos="fade-up"
-                            data-aos-delay={index * 150}
+                            data-aos-delay={index * 100}
                         >
-                            <div className="flex items-start justify-between mb-8">
-                                <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white/5 border border-white/5 text-[var(--c-accent)] group-hover:scale-110 transition-transform duration-300 shadow-xl">
-                                    {renderIcon(item.icon)}
-                                </div>
-                                <span
-                                    className="tag text-xs font-mono"
-                                >
-                                    {new Date(item.date).getFullYear()}
-                                </span>
+                            {/* Icon Container */}
+                            <div className="flex-shrink-0 w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center bg-[var(--c-surface)] border border-[var(--c-border)] text-[var(--c-accent)] shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                {renderIcon(item.icon)}
                             </div>
 
-                            <h3
-                                className="text-2xl font-bold mb-4 tracking-tight group-hover:text-[var(--c-accent)] transition-colors"
-                                style={{ fontFamily: 'var(--font-heading)' }}
-                            >
-                                {item.title}
-                            </h3>
+                            <div className="flex-1">
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                                    <h3
+                                        className="text-xl md:text-2xl font-bold tracking-tight text-[var(--c-text)]"
+                                        style={{ fontFamily: 'var(--font-heading)' }}
+                                    >
+                                        {item.title}
+                                    </h3>
+                                    <span className="tag text-xs font-mono py-1 px-3 bg-[var(--c-accent-subtle)] text-[var(--c-accent)] border border-[var(--c-accent)]/10">
+                                        {new Date(item.date).getFullYear()}
+                                    </span>
+                                </div>
 
-                            <p className="text-lg leading-relaxed text-[#94a3b8] flex-1">
-                                {item.description}
-                            </p>
+                                <p className="text-base md:text-lg leading-relaxed text-[var(--c-text-secondary)]">
+                                    {item.description}
+                                </p>
+                            </div>
                         </div>
                     ))}
                 </div>

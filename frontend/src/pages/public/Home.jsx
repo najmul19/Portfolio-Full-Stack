@@ -32,14 +32,12 @@ const Home = () => {
                 </section>
 
                 {/* Experience & Education */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <section className="panel" data-aos="fade-right">
-                        <ExperienceTimeline />
-                    </section>
-                    <section className="panel" data-aos="fade-left">
-                        <EducationTimeline />
-                    </section>
-                </div>
+                <section className="panel" data-aos="fade-up">
+                    <ExperienceTimeline />
+                </section>
+                <section className="panel" data-aos="fade-up">
+                    <EducationTimeline />
+                </section>
 
                 {/* Work */}
                 <section className="panel" data-aos="fade-up">

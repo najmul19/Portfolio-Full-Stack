@@ -28,13 +28,13 @@ const PublicationsList = () => {
                     {publications.map((pub, idx) => (
                         <div
                             key={pub._id}
-                            className="card p-6 md:p-8 flex flex-col sm:flex-row gap-6 md:gap-8 items-start hover:border-white/10 transition-all duration-300"
+                            className="card p-6 md:p-8 flex flex-col sm:flex-row gap-6 md:gap-8 items-start hover:border-[var(--c-accent)]/10 transition-all duration-300"
                             data-aos="fade-up"
                             data-aos-delay={idx * 100}
                         >
                             {/* Icon */}
                             <div
-                                className="hidden sm:flex flex-shrink-0 w-14 h-14 rounded-2xl items-center justify-center bg-white/5 border border-white/5"
+                                className="hidden sm:flex flex-shrink-0 w-14 h-14 rounded-2xl items-center justify-center bg-[var(--c-surface)] border border-[var(--c-border)]"
                             >
                                 <FaBook className="text-xl text-[var(--c-accent)]" />
                             </div>
@@ -49,8 +49,7 @@ const PublicationsList = () => {
                                             href={pub.url}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="hover:text-[var(--c-accent)] flex items-start gap-2 group transition-colors break-words"
-                                            style={{ color: 'var(--c-text)' }}
+                                            className="hover:text-[var(--c-accent)] flex items-start gap-2 group transition-colors break-words text-[var(--c-text)]"
                                         >
                                             <span className="group-hover:text-[var(--c-accent)] break-words">{pub.title}</span>
                                             <FaExternalLinkAlt
@@ -63,15 +62,15 @@ const PublicationsList = () => {
                                 </h3>
 
                                 <div className="flex flex-wrap items-center gap-3 text-sm mb-4">
-                                    <span className="px-3 py-1 rounded-full bg-white/5 text-[var(--c-accent)] font-semibold border border-white/5 break-words max-w-full">
+                                    <span className="tag py-0.5 px-3 bg-[var(--c-accent-subtle)] text-[var(--c-accent)] text-xs border border-[var(--c-accent)]/10">
                                         {pub.publisher}
                                     </span>
-                                    <span className="text-[#64748b]">
+                                    <span className="text-[var(--c-text-muted)] font-mono">
                                         {new Date(pub.date).getFullYear()}
                                     </span>
                                 </div>
 
-                                <p className="text-base leading-relaxed text-[#94a3b8]">
+                                <p className="text-base leading-relaxed text-[var(--c-text-secondary)]">
                                     {pub.description}
                                 </p>
                             </div>
